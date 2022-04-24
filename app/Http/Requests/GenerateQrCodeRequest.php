@@ -26,7 +26,7 @@ class GenerateQrCodeRequest extends FormRequest
   public function rules()
   {
     return [
-      'size' => 'required|integer|min:100'
+      'size' => ''
     ];
   }
 

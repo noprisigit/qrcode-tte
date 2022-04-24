@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\GenerateQrCodeRequest;
 use App\Http\Requests\UploadLogoQrCodeRequest;
 use App\Models\QrCodeLogo;
+use App\Models\Tte;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -22,7 +23,7 @@ class GenerateQrCodeController extends Controller
 
   public function generate(GenerateQrCodeRequest $request)
   {
-    $validated = $request->validated();
+    $size = 300;
 
     if ($request->with_logo) {
       $qrcodeLogo = QrCodeLogo::where('user_id', auth()->user()->id)->first();
@@ -35,14 +36,31 @@ class GenerateQrCodeController extends Controller
 
       $qrcode = QrCode::format('png')
         ->merge($path, 0.5, true)
-        ->size($validated['size'])
+        ->size($size)
         ->errorCorrection('H')
         ->generate('http://google.com');
+      
     } else {
-      $qrcode = QrCode::format('png')->size($validated['size'])->generate('http://google.com');
+      $qrcode = QrCode::format('png')->size($size)->generate('http://google.com');
     }
 
-    return response(base64_encode($qrcode))->header('Content-Type', 'image/png');
+    $tte = Tte::where('user_id', auth()->user()->id)->first();
+    if ($tte && $tte->qrcode) {
+      Storage::delete($tte->qrcode);
+    }
+    
+    $output_filename = '/img/qr-code/img-' . time() . '.png';
+    Storage::disk('public')->put($output_filename, $qrcode);
+
+    Tte::updateOrCreate(
+      ['user_id' => auth()->user()->id],
+      ['qrcode' => $output_filename]
+    );
+
+    // return response(base64_encode($qrcode))->header('Content-Type', 'image/png');
+    return response()->json([
+      'html' => view('user.generate-qrcode.generate-qrcode-result', compact('output_filename'))->render(),
+    ]);
   }
 
   public function uploadLogo(UploadLogoQrCodeRequest $request)

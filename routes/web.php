@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\HelperController;
 use App\Http\Controllers\PIC\VerificationController as AppVerificationController;
+use App\Http\Controllers\User\DocumentController;
 use App\Http\Controllers\User\GenerateQrCodeController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\VerificationController;
@@ -71,6 +72,12 @@ Route::middleware('auth')->group(function () {
       Route::put('/update', [ProfileController::class, 'update'])->name('user.profile.update');
       Route::get('/change-password', [ProfileController::class, 'changePassword'])->name('user.profile.change-password');
       Route::post('/change-password', [ProfileController::class, 'changePasswordProcess'])->name('user.profile.change-password.process');
+    });
+
+    Route::group(['prefix' => 'documents'], function() {
+      Route::get('/', [DocumentController::class, 'index'])->name('user.documents.index');
+      Route::post('/store', [DocumentController::class, 'store'])->name('user.documents.store');
+      Route::get('/{id}/destroy', [DocumentController::class, 'destroy'])->name('user.documents.destroy');
     });
 
     Route::group(['prefix' => 'verification'], function() {

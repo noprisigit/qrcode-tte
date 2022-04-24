@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Mazer Admin Dashboard</title>
+  <title>Login - SITTE</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.css') }}">
   <link rel="stylesheet" href="{{ asset('assets/vendors/bootstrap-icons/bootstrap-icons.css') }}">
@@ -18,8 +18,8 @@
     <div class="row h-100">
       <div class="col-lg-7 col-12">
         <div id="auth-left">
-          <div class="auth-logo mb-5">
-            <a href="{{ route('auth.login') }}"><img src="{{ asset('assets/images/logo/logo.png') }}" alt="Logo"></a>
+          <div class="mb-5 text-center">
+            <a href="{{ route('auth.login') }}"><img src="{{ asset('assets/images/logo/logo_babel.png') }}" class="img-fluid" width="15%" alt="Logo"></a>
           </div>
           <h1 class="auth-title">{{ __('Masuk') }}</h1>
           <p class="auth-subtitle mb-5">{{ __('Masuk dengan data Anda yang Anda masukkan saat pendaftaran.') }}</p>

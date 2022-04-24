@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class LoginRequest extends FormRequest
+class DocumentRequest extends FormRequest
 {
   /**
    * Determine if the user is authorized to make this request.
@@ -24,16 +24,16 @@ class LoginRequest extends FormRequest
   public function rules()
   {
     return [
-      'email' => 'required|email:dns|max:255',
-      'password' => 'required',
+      'file_type' => 'required',
+      'file' => 'required|file|max:2048'
     ];
   }
 
   public function attributes()
   {
     return [
-      'email' => 'Email',
-      'password' => 'Kata sandi',
+      'file_type' => 'Jenis dokumen',
+      'file' => 'File'
     ];
   }
 }

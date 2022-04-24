@@ -36,7 +36,7 @@ class LoginController extends Controller
         return redirect()->route('pic.dashboard.index');
         
       if (auth()->user()->role_id == User::ROLE_USER)
-        return redirect()->route('user.dashboard.index');
+        return redirect()->route('user.profile.index');
     }
 
     Session::flash('error', 'Email atau kata sandi salah!');

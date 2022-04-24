@@ -1,5 +1,7 @@
 @extends('main')
 
+@section('title', 'Ubah Profil Saya')
+
 @section('content')
 <section class="section">
   <div class="row">
