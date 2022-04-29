@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\User;
-
+namespace App\Http\Controllers\PIC;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GenerateQrCodeRequest;
 use App\Http\Requests\UploadLogoQrCodeRequest;
 use App\Models\QrCodeLogo;
 use App\Models\Tte;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use BaconQrCode\Encoder\QrCode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -18,7 +17,7 @@ class GenerateQrCodeController extends Controller
   {
     $qrcodeLogo = QrCodeLogo::where('user_id', auth()->user()->id)->first();
 
-    return view('user.generate-qrcode.generate-qrcode-index', compact('qrcodeLogo'));
+    return view('pic.generate-qrcode.generate-qrcode-index', compact('qrcodeLogo'));
   }
 
   public function generate(GenerateQrCodeRequest $request)
@@ -59,7 +58,7 @@ class GenerateQrCodeController extends Controller
 
     // return response(base64_encode($qrcode))->header('Content-Type', 'image/png');
     return response()->json([
-      'html' => view('user.generate-qrcode.generate-qrcode-result', compact('output_filename'))->render(),
+      'html' => view('pic.generate-qrcode.generate-qrcode-result', compact('output_filename'))->render(),
     ]);
   }
 
@@ -78,7 +77,7 @@ class GenerateQrCodeController extends Controller
       $qrcodeLogo->save();
     } else {
 
-      $qrcodeLogo = new QrCodeLogo;
+      $qrcodeLogo = new QrCodeLogo();
       $qrcodeLogo->user_id = auth()->user()->id;
       $qrcodeLogo->logo = $filename;
       $qrcodeLogo->save();

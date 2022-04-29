@@ -18,6 +18,7 @@ class CreateUsersTable extends Migration
       $table->string('nama');
       $table->string('email')->unique();
       $table->string('password');
+      $table->string('unique_code')->unique();
       $table->string('no_telp')->nullable();
       $table->foreignId('dinas_id')->nullable()->constrained();
       $table->unsignedBigInteger('sub_bidang_id')->nullable();

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\HelperController;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -22,6 +23,7 @@ class RegisterController extends Controller
 
     $created = User::create([
       'nama' => $validated['name'],
+      'unique_code' => HelperController::generateUniqueCode(),
       'email' => $validated['email'],
       'password' => Hash::make($validated['password']),
       'role_id' => User::ROLE_USER,

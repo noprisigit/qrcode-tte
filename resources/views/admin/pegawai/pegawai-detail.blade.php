@@ -5,6 +5,8 @@
 @section('content')
 <section class="section">
 
+  <a href="{{ route('admin.pegawai.index') }}" class="btn btn-primary mb-3"><i class="fas fa-arrow-left me-2"></i> Kembali</a>
+
   @if (Session::has('success'))
     <div class="alert alert-success notification">{{ Session::get('success') }}</div>
   @endif
@@ -137,7 +139,6 @@
                         <td>{{ $document->created_at->format('d M Y') }}</td>
                         <td>
                           <a href="{{ asset('storage/' . $document->nama_file ) }}" target="_blank" class="btn btn-primary"><i class="fas fa-download me-2"></i> {{ __('Unduh') }}</a>
-                          <a href="{{ route('user.documents.destroy', $document->id) }}" class="btn btn-danger" onclick="confirm('File akan dihapus!')"><i class="fas fa-trash me-2"></i> {{ __('Hapus') }}</a>
                         </td>
                       </tr>
                     @endforeach

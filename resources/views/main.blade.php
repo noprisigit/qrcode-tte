@@ -36,10 +36,17 @@
             <li class="sidebar-title">Menu</li>
 
             @if (auth()->user()->role_id == \App\Models\User::ROLE_ADMIN)
-              <li class="sidebar-item  ">
-                <a href="index.html" class='sidebar-link'>
+              <li class="sidebar-item  @if (Route::currentRouteName() == 'admin.dashboard.index') active @endif">
+                <a href="{{ route('admin.dashboard.index') }}" class='sidebar-link'>
                   <i class="bi bi-grid-fill"></i>
                   <span>Dashboard</span>
+                </a>
+              </li>
+
+              <li class="sidebar-item @if(Route::currentRouteName() == 'admin.pegawai.index' || Route::currentRouteName() == 'admin.pegawai.verification' || Route::currentRouteName() == 'admin.pegawai.detail') active @endif">
+                <a href="{{ route('admin.pegawai.index') }}" class='sidebar-link'>
+                  <i class="bi bi-person-check-fill"></i>
+                  <span>Pegawai</span>
                 </a>
               </li>
 
@@ -60,10 +67,38 @@
             @endif
 
             @if (auth()->user()->role_id == \App\Models\User::ROLE_PIC)
-              <li class="sidebar-item @if(Route::currentRouteName() == 'pic.verification.index' || Request::is('pic/verification*')) active @endif">
+              <li class="sidebar-item @if(Route::currentRouteName() == 'pic.verification.index' || Route::currentRouteName() == 'pic.verification.edit' || Route::currentRouteName() == 'pic.verification.detail') active @endif">
                 <a href="{{ route('pic.verification.index') }}" class='sidebar-link'>
                   <i class="bi bi-person-check-fill"></i>
                   <span>Pegawai</span>
+                </a>
+              </li>
+
+              <li class="sidebar-item  @if(Route::currentRouteName() == 'pic.profile.index' || Request::is('pic/profile*')) active @endif">
+                <a href="{{ route('pic.profile.index') }}" class='sidebar-link'>
+                  <i class="bi bi-person-badge"></i>
+                  <span>Profil</span>
+                </a>
+              </li>
+              
+              <li class="sidebar-item  @if(Route::currentRouteName() == 'pic.documents.index') active @endif">
+                <a href="{{ route('pic.documents.index') }}" class='sidebar-link'>
+                  <i class="bi bi-file-check"></i>
+                  <span>Berkas</span>
+                </a>
+              </li>
+
+              <li class="sidebar-item  @if(Route::currentRouteName() == 'pic.verification.profile') active @endif">
+                <a href="{{ route('pic.verification.profile') }}" class='sidebar-link'>
+                  <i class="bi bi-card-checklist"></i>
+                  <span>Verifikasi</span>
+                </a>
+              </li>
+
+              <li class="sidebar-item  @if(Route::currentRouteName() == 'pic.generate-qrcode.index') active @endif">
+                <a href="{{ route('pic.generate-qrcode.index') }}" class='sidebar-link'>
+                  <i class="bi bi-code-square"></i>
+                  <span>Cetak TTE</span>
                 </a>
               </li>
             @endif
@@ -73,7 +108,7 @@
               <li class="sidebar-item  @if(Route::currentRouteName() == 'user.profile.index' || Request::is('user/profile*')) active @endif">
                 <a href="{{ route('user.profile.index') }}" class='sidebar-link'>
                   <i class="bi bi-person-badge"></i>
-                  <span>Profile</span>
+                  <span>Profil</span>
                 </a>
               </li>
               
@@ -136,8 +171,8 @@
                       <a href="{{ route('admin.dashboard.index') }}">Home</a>
                     @endif
                     
-                    @if(auth()->user()->role_id == \App\Models\User::ROLE_ADMIN)
-                      <a href="{{ route('pic.dashboard.index') }}">Home</a>
+                    @if(auth()->user()->role_id == \App\Models\User::ROLE_PIC)
+                      <a href="{{ route('pic.verification.index') }}">Home</a>
                     @endif
                   </li>
                   <li class="breadcrumb-item active" aria-current="page">@yield('title')</li>
@@ -147,18 +182,20 @@
           </div>
         </div>
 
+      </div>
+      <div class="page-content">
         @yield('content')
       </div>
 
       <footer>
         <div class="footer clearfix mb-0 text-muted">
           <div class="float-start">
-            <p>2021 &copy; Mazer</p>
+            <p>{{ date('Y') }} &copy; Provinsi Kepulauan Bangka Belitung</p>
           </div>
-          <div class="float-end">
+          {{-- <div class="float-end">
             <p>Crafted with <span class="text-danger"><i class="bi bi-heart"></i></span> by <a
                 href="http://ahmadsaugi.com">A. Saugi</a></p>
-          </div>
+          </div> --}}
         </div>
       </footer>
     </div>

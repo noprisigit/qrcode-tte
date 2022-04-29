@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\PIC;
 
 use App\Http\Controllers\Controller;
+use App\Models\Document;
 use App\Models\Pegawai;
 use App\Models\User;
 use App\Models\VerifikasiPegawai;
@@ -13,7 +14,10 @@ class VerificationController extends Controller
 {
   public function index()
   {
-    $users = User::with('bidang', 'verifikasi_pegawai')->where('dinas_id', auth()->user()->dinas_id)->get()->except(auth()->user()->id);
+    $users = User::with('bidang', 'verifikasi_pegawai')
+      ->where('dinas_id', auth()->user()->dinas_id)->get()
+      ->where('role_id', User::ROLE_USER)
+      ->except(auth()->user()->id);
 
     return view('pic.verification.verification-index', compact('users'));
   }
@@ -33,8 +37,11 @@ class VerificationController extends Controller
       $query->where('dinas_id', auth()->user()->dinas_id);
     })->first();
 
+    $documents = Document::where('user_id', $id)->whereHas('user', function($query) {
+      $query->where('dinas_id', auth()->user()->dinas_id);
+    })->get();
 
-    return view('pic.verification.verification-detail', compact('pegawai'));
+    return view('pic.verification.verification-detail', compact('pegawai', 'documents'));
   }
 
   public function accept(Request $request)
@@ -69,5 +76,25 @@ class VerificationController extends Controller
 
     $verifikasi_pegawai->status = VerifikasiPegawai::STATUS_REJECTED;
     $verifikasi_pegawai->save();
+  }
+
+  public function profile()
+  {
+    $verifications = VerifikasiPegawai::where('user_id', auth()->user()->id)->get();
+
+    return view('pic.verification.verification-profile', compact('verifications'));
+  }
+
+  public function reset(Request $request)
+  {
+    if ($request->id <> auth()->user()->id) {
+      $request->session()->flash('error', 'Anda tidak memiliki akses!');
+      return response()->json(['status' => false]);
+    }
+
+    VerifikasiPegawai::where('user_id', $request->id)->delete();
+
+    $request->session()->flash('success', 'Verifikasi berhasil dihapus!');
+    return response()->json(['status' => true]);
   }
 }

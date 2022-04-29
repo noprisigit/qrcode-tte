@@ -29,6 +29,7 @@
             <th>{{ __('Nama') }}</th>
             <th>{{ __('Email') }}</th>
             <th>{{ __('No Telepon') }}</th>
+            <th>{{ __('Dinas') }}</th>
             <th>{{ __('Bidang') }}</th>
             <th>{{ __('Status Verifikasi') }}</th>
             <th>{{ __('Aksi') }}</th>
@@ -41,6 +42,11 @@
               <td>{{ $item->nama }}</td>
               <td>{{ $item->email }}</td>
               <td>{{ $item->no_telp }}</td>
+              <td>
+                @if ($item->dinas_id)
+                  {{ $item->dinas->nama }}
+                @endif
+              </td>
               <td>
                 @if ($item->sub_bidang_id)
                   {{ $item->bidang->nama }}
@@ -67,12 +73,19 @@
               </td>
               <td>
                 @if (count($arr) > 0)
-                  <a href="{{ route('pic.verification.edit', ['id' => $item->id]) }}" class="btn btn-secondary btn-sm"><i class="fas fa-check"></i> {{ __('Verifikasi') }}</a>
+                  <a href="{{ route('admin.pegawai.verification', ['id' => $item->id]) }}" class="btn btn-secondary btn-sm"><i class="fas fa-check"></i> {{ __('Verifikasi') }}</a>
                 @endif
-                <a href="{{ route('pic.verification.detail', ['id' => $item->id]) }}" class="btn btn-dark btn-sm me-1">
+                <a href="{{ route('admin.pegawai.detail', ['id' => $item->id]) }}" class="btn btn-dark btn-sm me-1">
                   <i class="fas fa-eye me-2"></i>
                   {{ __('Detail') }}
                 </a>
+
+                @if ($item->pegawai)
+                <a href="{{ route('admin.pegawai.tte', ['id' => $item->id]) }}" class="btn btn-primary btn-sm me-1">
+                  <i class="fas fa-qrcode me-2"></i>
+                  {{ __('Cetak TTE') }}
+                </a>
+                @endif
                 {{-- <button type="button" class="btn btn-danger btn-sm btn-delete" data-action="{{ route('admin.bidang.destroy', $item->id) }}" data-bs-toggle="modal" data-bs-target="#modalDelete">
                   <i class="fas fa-trash-alt me-2"></i>
                   {{ __('Hapus') }}

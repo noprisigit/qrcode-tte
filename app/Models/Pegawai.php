@@ -15,6 +15,7 @@ class Pegawai extends Model
     'user_id',
     'tempat_lahir',
     'tanggal_lahir',
+    'jenis_kelamin',
     'nik',
     'nip',
     'pangkat',

@@ -33,7 +33,7 @@ class LoginController extends Controller
         return redirect()->route('admin.dashboard.index');
 
       if (auth()->user()->role_id == User::ROLE_PIC)
-        return redirect()->route('pic.dashboard.index');
+        return redirect()->route('pic.verification.index');
         
       if (auth()->user()->role_id == User::ROLE_USER)
         return redirect()->route('user.profile.index');

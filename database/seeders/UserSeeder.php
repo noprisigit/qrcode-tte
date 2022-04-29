@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Http\Controllers\HelperController;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -20,6 +21,7 @@ class UserSeeder extends Seeder
         [
           'nama' => 'Admin',
           'email' => 'admin@gmail.com',
+          'unique_code' => HelperController::generateUniqueCode(),
           'password' => Hash::make('admin'),
           'dinas_id' => 1,
           'sub_bidang_id' => 2,
@@ -29,6 +31,7 @@ class UserSeeder extends Seeder
         [
           'nama' => 'PIC',
           'email' => 'pic@gmail.com',
+          'unique_code' => HelperController::generateUniqueCode(),
           'password' => Hash::make('pic'),
           'dinas_id' => 1,
           'sub_bidang_id' => 2,
@@ -38,6 +41,7 @@ class UserSeeder extends Seeder
         [
           'nama' => 'User',
           'email' => 'user@gmail.com',
+          'unique_code' => HelperController::generateUniqueCode(),
           'password' => Hash::make('user'),
           'dinas_id' => 1,
           'sub_bidang_id' => 2,
