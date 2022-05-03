@@ -10,7 +10,7 @@ use PDF;
 
 class HelperController extends Controller
 {
-  public function selectBidang(Request $request)
+  public static function selectBidang(Request $request)
   {
     $dinas_id = $request->dinas_id;
 
@@ -19,7 +19,7 @@ class HelperController extends Controller
     return view('components.select-bidang', compact('options'));
   }
 
-  public function showDetailPegawai($unique_code)
+  public static function showDetailPegawai($unique_code)
   { 
     $user = User::with('dinas', 'bidang', 'pegawai')->where('unique_code', $unique_code)->first();
 
@@ -27,7 +27,7 @@ class HelperController extends Controller
     return $pdf->download('TTE-'.$user->nama.'.pdf');
   }
 
-  public function generateUniqueCode()
+  public static function generateUniqueCode()
   {
 
     $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -43,7 +43,7 @@ class HelperController extends Controller
     }
 
     if (User::where('unique_code', $code)->exists()) {
-      $this->generateUniqueCode();
+      generateUniqueCode();
     }
 
     return $code;
