@@ -15,7 +15,7 @@ class CreateSubBidangTable extends Migration
     {
         Schema::create('sub_bidang', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('dinas_id')->constrained();
+            $table->unsignedBigInteger('dinas_id');
             $table->string('nama');
             $table->timestamps();
         });
