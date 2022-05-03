@@ -24,20 +24,38 @@ class RegisterRequest extends FormRequest
   public function rules()
   {
     return [
-      'name' => 'required|string|max:255',
+      'nama' => 'required|string|max:255',
+      'nik' => 'required|max:255',
+      'nip' => 'required|max:255',
       'email' => 'required|email:dns|max:255|unique:users',
+      'no_telp' => 'required',
+      'tempat_lahir' => 'required|string|max:255',
+      'tanggal_lahir' => 'required|date',
+      'golongan' => 'required|string|max:255',
+      'pangkat' => 'required|string|max:255',
       'password' => 'required',
       'password_confirmation' => 'required|same:password',
+      'ktp' => 'required|mimes:jpeg,jpg,png,gif|max:2048',
+      'sk_terakhir' => 'required|mimes:jpeg,jpg,png,gif|max:2048',
     ];
   }
 
   public function attributes()
   {
     return [
-      'name' => 'Nama lengkap',
+      'nama' => 'Nama lengkap',
+      'nik' => 'NIK',
+      'nip' => 'NIP',
       'email' => 'Email',
+      'no_telp' => 'No. telepon',
+      'tempat_lahir' => 'Tempat lahir',
+      'tanggal_lahir' => 'Tanggal lahir',
+      'golongan' => 'Golongan',
+      'pangkat' => 'Pangkat',
       'password' => 'Kata sandi',
-      'password_confirmation' => 'Konfirmasi kata sandi'
+      'password_confirmation' => 'Konfirmasi kata sandi',
+      'ktp' => 'KTP',
+      'sk_terakhir' => 'SK Terakhir',
     ];
   }
 }

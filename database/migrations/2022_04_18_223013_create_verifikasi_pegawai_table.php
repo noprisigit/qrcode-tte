@@ -15,7 +15,8 @@ class CreateVerifikasiPegawaiTable extends Migration
     {
         Schema::create('verifikasi_pegawai', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
+            // $table->foreignId('user_id')->constrained();
+            $table->string('identity_number');
             $table->string('label');
             $table->string('type');
             $table->string('name');

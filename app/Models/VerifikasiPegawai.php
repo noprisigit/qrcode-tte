@@ -14,7 +14,7 @@ class VerifikasiPegawai extends Model
   const STATUS_REJECTED = 2;
 
   protected $table = 'verifikasi_pegawai';
-  protected $fillable = ['user_id', 'label', 'type', 'name', 'value', 'status'];
+  protected $fillable = ['identity_number', 'label', 'type', 'name', 'value', 'status'];
 
   public function user()
   {

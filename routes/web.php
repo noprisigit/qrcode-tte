@@ -29,13 +29,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 
+Route::get('/register', [RegisterController::class, 'register'])->name('register');
+Route::post('/register', [RegisterController::class, 'doRegister'])->name('register.doRegister');
 
 
 Route::group(['prefix' => 'auth', 'middleware' => 'guest'], function () {
   Route::get('/login', [LoginController::class, 'index'])->name('auth.login');
   Route::post('/login', [LoginController::class, 'authenticate'])->name('auth.login.process');
-  Route::get('/register', [RegisterController::class, 'index'])->name('auth.register');
-  Route::post('/register', [RegisterController::class, 'register'])->name('auth.register.process');
+  // Route::get('/register', [RegisterController::class, 'index'])->name('auth.register');
+  // Route::post('/register', [RegisterController::class, 'register'])->name('auth.register.process');
 });
 
 Route::middleware('auth')->group(function () {
