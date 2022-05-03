@@ -20,12 +20,11 @@ class CreateUsersTable extends Migration
       $table->string('password');
       $table->string('unique_code')->unique();
       $table->string('no_telp')->nullable();
-      $table->foreignId('dinas_id')->nullable()->constrained();
+      $table->unsignedBigInteger('dinas_id')->nullable();
       $table->unsignedBigInteger('sub_bidang_id')->nullable();
-      $table->foreignId('role_id')->constrained();
+      $table->unsignedBigInteger('role_id')->nullable();
       $table->string('avatar')->nullable();
       $table->tinyInteger('status');
-      $table->foreign('sub_bidang_id')->references('id')->on('sub_bidang');
       $table->timestamps();
     });
   }
