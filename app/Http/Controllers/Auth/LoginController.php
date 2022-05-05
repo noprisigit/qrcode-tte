@@ -5,19 +5,35 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Models\User;
+use App\Models\VerifikasiPegawai;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
 {
-  public function index()
+  public function login()
   {
     return view('auth.login');
   }
 
-  public function authenticate(LoginRequest $request)
+  public function doLogin(LoginRequest $request)
   {
     $validated = $request->validated();
+
+    $email = $validated['email'];
+    $verifikasi_pegawai = VerifikasiPegawai::where('value', $email)->first();
+    if (!$verifikasi_pegawai) {
+      $request->session()->flash('error', 'Email anda tidak terdaftar!');
+      return redirect()->route('login');
+    } else {
+      if ($verifikasi_pegawai->status == VerifikasiPegawai::STATUS_WAITING) {
+        $request->session()->flash('error', 'Data anda masih dalam tahap verifikasi!');
+        return redirect()->route('login');
+      } elseif ($verifikasi_pegawai->status == VerifikasiPegawai::STATUS_REJECTED) {
+        $request->session()->flash('error', 'Data anda telah ditolak!. <br> Silahkan hubungi administrator untuk melakukan reset data anda!');
+        return redirect()->route('login');
+      }
+    }
 
     $credentials = [
       'email' => $validated['email'],
@@ -40,7 +56,7 @@ class LoginController extends Controller
     }
 
     Session::flash('error', 'Email atau kata sandi salah!');
-    return redirect()->route('auth.login');
+    return redirect()->route('login');
   }
 
   public function logout(Request $request)
@@ -50,6 +66,6 @@ class LoginController extends Controller
     $request->session()->regenerateToken();
     
     Session::flash('success', 'Anda berhasil keluar!');
-    return redirect()->route('auth.login');
+    return redirect()->route('login');
   }
 }

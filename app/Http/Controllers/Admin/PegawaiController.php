@@ -8,6 +8,7 @@ use App\Http\Requests\UploadLogoQrCodeRequest;
 use App\Models\Document;
 use App\Models\Pegawai;
 use App\Models\QrCodeLogo;
+use App\Models\TempUser;
 use App\Models\Tte;
 use App\Models\User;
 use App\Models\VerifikasiPegawai;
@@ -20,9 +21,12 @@ class PegawaiController extends Controller
 {
   public function index()
   {
-    $users = User::with('bidang', 'verifikasi_pegawai', 'pegawai')
-      ->where('id', '!=', auth()->user()->id)
-      ->get();
+    // $users = User::with('bidang', 'verifikasi_pegawai', 'pegawai')
+    //   ->get();
+
+    // $users = VerifikasiPegawai::groupBy('identity_number')->get();
+
+    $users = TempUser::with('bidang', 'dinas')->get();
       
     return view('admin.pegawai.pegawai-index', compact('users'));
   }

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\HelperController;
 use App\Http\Requests\RegisterRequest;
+use App\Models\Dinas;
+use App\Models\TempUser;
 use App\Models\User;
 use App\Models\VerifikasiPegawai;
 use Illuminate\Http\Request;
@@ -15,7 +17,9 @@ class RegisterController extends Controller
 {
   public function register()
   {
-    return response()->view('auth.register');
+    $dinas = Dinas::all();
+
+    return response()->view('auth.register', compact('dinas'));
   }
 
   public function doRegister(RegisterRequest $request)
@@ -24,10 +28,22 @@ class RegisterController extends Controller
 
     $identity_number = $validated['nik'];
 
-    $is_verification_data_exist = VerifikasiPegawai::where('identity_number', $identity_number)->exists();
+    $is_verification_data_exist = VerifikasiPegawai::where('identity_number', $identity_number)
+      ->where('status', VerifikasiPegawai::STATUS_WAITING)
+      ->exists();
     if ($is_verification_data_exist) {
       $request->session()->flash('error', 'Data anda sedang dalam proses verifikasi!');
       return redirect()->route('register');
+    }
+
+    if ($request->hasFile('ktp')) {
+      $file_ktp = $request->file('ktp');
+      $ktp = $file_ktp->store('documents/ktp');
+    }
+
+    if ($request->hasFile('sk_terakhir')) {
+      $file_sk_terakhir = $request->file('sk_terakhir');
+      $sk_terakhir = $file_sk_terakhir->store('documents/sk_terakhir');
     }
 
     $data = [
@@ -39,6 +55,15 @@ class RegisterController extends Controller
         'value' => $validated['nama'],
         'status' => VerifikasiPegawai::STATUS_WAITING,
       ],
+      [
+        'identity_number' => $identity_number,
+        'type' => 'string',
+        'label' => 'Jenis Kelamin',
+        'name' => 'jenis_kelamin',
+        'value' => $validated['jenis_kelamin'],
+        'status' => VerifikasiPegawai::STATUS_WAITING,
+      ],
+
       [
         'identity_number' => $identity_number,
         'type' => 'string',
@@ -90,6 +115,22 @@ class RegisterController extends Controller
       [
         'identity_number' => $identity_number,
         'type' => 'string',
+        'label' => 'Dinas',
+        'name' => 'dinas_id',
+        'value' => $validated['dinas_id'],
+        'status' => VerifikasiPegawai::STATUS_WAITING
+      ],
+      [
+        'identity_number' => $identity_number,
+        'type' => 'string',
+        'label' => 'Bidang',
+        'name' => 'sub_bidang_id',
+        'value' => $validated['sub_bidang_id'],
+        'status' => VerifikasiPegawai::STATUS_WAITING
+      ],
+      [
+        'identity_number' => $identity_number,
+        'type' => 'string',
         'label' => 'Golongan',
         'name' => 'golongan',
         'value' => $validated['golongan'],
@@ -118,39 +159,48 @@ class RegisterController extends Controller
         'name' => 'password_confirmation',
         'value' => $validated['password_confirmation'],
         'status' => VerifikasiPegawai::STATUS_WAITING
+      ],
+      [
+        'identity_number' => $identity_number,
+        'type' => 'string',
+        'label' => 'File KTP',
+        'name' => 'file_ktp',
+        'value' => $ktp,
+        'status' => VerifikasiPegawai::STATUS_WAITING
+      ],
+      [
+        'identity_number' => $identity_number,
+        'type' => 'string',
+        'label' => 'File SK Terakhir',
+        'name' => 'file_sk_terakhir',
+        'value' => $sk_terakhir,
+        'status' => VerifikasiPegawai::STATUS_WAITING
       ]
     ];
+
+    TempUser::create([
+      'nama' => $validated['nama'],
+      'jenis_kelamin' => $validated['jenis_kelamin'],
+      'email' => $validated['email'],
+      'password' => $validated['password'],
+      'dinas_id' => $validated['dinas_id'],
+      'sub_bidang_id' => $validated['sub_bidang_id'],
+      'unique_code' => HelperController::generateUniqueCode(),
+      'nip' => $validated['nip'],
+      'nik' => $validated['nik'],
+      'no_telp' => $validated['no_telp'],
+      'tempat_lahir' => $validated['tempat_lahir'],
+      'tanggal_lahir' => $validated['tanggal_lahir'],
+      'golongan' => $validated['golongan'],
+      'pangkat' => $validated['pangkat'],
+      'role_id' => User::ROLE_USER,
+      'file_ktp' => $ktp,
+      'file_sk_terakhir' => $sk_terakhir,
+    ]);
 
     VerifikasiPegawai::insert($data);
 
     $request->session()->flash('success', 'Data anda telah berhasil didaftarkan. <br> Data anda akan kami verifikasi terlebih dahulu.');
     return redirect()->route('register');
   }
-  // public function index()
-  // {
-  //   return view('auth.register');
-  // }
-
-  // public function register(RegisterRequest $request)
-  // {
-  //   $validated = $request->validated();
-
-  //   $created = User::create([
-  //     'nama' => $validated['name'],
-  //     'unique_code' => HelperController::generateUniqueCode(),
-  //     'email' => $validated['email'],
-  //     'password' => Hash::make($validated['password']),
-  //     'role_id' => User::ROLE_USER,
-  //     'avatar' => 'default.png',
-  //     'status' => User::STATUS_ACTIVE
-  //   ]);
-
-  //   if ($created) {
-  //     Session::flash('success', 'Akun berhasil ditambahkan!');
-  //   } else {
-  //     Session::flash('error', 'Akun gagal ditambahkan!');
-  //   }
-
-  //   return redirect()->route('auth.login');
-  // }
 }

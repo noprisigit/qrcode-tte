@@ -25,12 +25,15 @@ class RegisterRequest extends FormRequest
   {
     return [
       'nama' => 'required|string|max:255',
+      'jenis_kelamin' => 'required',
       'nik' => 'required|max:255',
       'nip' => 'required|max:255',
-      'email' => 'required|email:dns|max:255|unique:users',
+      'email' => 'required|email:dns|max:255|unique:temp_users',
       'no_telp' => 'required',
       'tempat_lahir' => 'required|string|max:255',
       'tanggal_lahir' => 'required|date',
+      'dinas_id' => 'required',
+      'sub_bidang_id' => 'required',
       'golongan' => 'required|string|max:255',
       'pangkat' => 'required|string|max:255',
       'password' => 'required',
@@ -44,12 +47,15 @@ class RegisterRequest extends FormRequest
   {
     return [
       'nama' => 'Nama lengkap',
+      'jenis_kelamin' => 'Jenis kelamin',
       'nik' => 'NIK',
       'nip' => 'NIP',
       'email' => 'Email',
       'no_telp' => 'No. telepon',
       'tempat_lahir' => 'Tempat lahir',
       'tanggal_lahir' => 'Tanggal lahir',
+      'dinas_id' => 'Dinas',
+      'sub_bidang_id' => 'Bidang',
       'golongan' => 'Golongan',
       'pangkat' => 'Pangkat',
       'password' => 'Kata sandi',

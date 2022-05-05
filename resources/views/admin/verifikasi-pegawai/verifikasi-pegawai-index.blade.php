@@ -32,6 +32,7 @@
               <th>{{ __('No Telepon') }}</th>
               <th>{{ __('Dinas') }}</th>
               <th>{{ __('Bidang') }}</th>
+              <th>{{ __('Status Verifikasi') }}</th>
               <th>{{ __('Aksi') }}</th>
             </tr>
           </thead>
@@ -49,19 +50,49 @@
                 </td>
                 <td>
                   @if ($item->sub_bidang_id)
-                  {{ $item->bidang->nama }}
+                    {{ $item->bidang->nama }}
                   @endif
                 </td>
-                
+
+                <td>
+                  @php
+                    $verifikasi_pegawai = \App\Models\VerifikasiPegawai::where('identity_number', $item->nik)->first();
+                  @endphp
+
+                  @if ($verifikasi_pegawai)
+                    @if ($verifikasi_pegawai->status == \App\Models\VerifikasiPegawai::STATUS_WAITING)
+                      <span class="badge badge-dark">Menunggu</span>
+                    @elseif ($verifikasi_pegawai->status == \App\Models\VerifikasiPegawai::STATUS_ACCEPTED)
+                      <span class="badge badge-success">Diterima</span>
+                    @elseif ($verifikasi_pegawai->status == \App\Models\VerifikasiPegawai::STATUS_REJECTED)
+                      <span class="badge badge-danger">Ditolak</span>
+                    @endif
+                  @endif
+                </td>
+
                 <td>
                   {{-- @if (count($arr) > 0)
                   <a href="{{ route('admin.pegawai.verification', ['id' => $item->id]) }}"
                     class="btn btn-secondary btn-sm"><i class="fas fa-check"></i> {{ __('Verifikasi') }}</a>
                   @endif --}}
-                  <a href="{{ route('admin.pegawai.detail', ['id' => $item->id]) }}" class="btn btn-dark btn-sm me-1">
-                    <i class="fas fa-eye me-2"></i>
-                    {{ __('Detail') }}
-                  </a>
+                  @if ($verifikasi_pegawai)
+                    @if ($verifikasi_pegawai->status == \App\Models\VerifikasiPegawai::STATUS_WAITING)
+                      <a href="{{ route('admin.verifikasi-pegawai.verify', ['id' => $item->id]) }}" class="btn btn-dark btn-sm me-1">
+                        <i class="fas fa-user-check me-2"></i>
+                        {{ __('Verifikasi') }}
+                      </a>
+                    @elseif ($verifikasi_pegawai->status == \App\Models\VerifikasiPegawai::STATUS_ACCEPTED)
+                      <a href="{{ route('admin.verifikasi-pegawai.detail', ['id' => $item->id]) }}" class="btn btn-primary btn-sm me-1">
+                        <i class="fas fa-eye me-2"></i>
+                        {{ __('Lihat') }}
+                      </a>
+                    @elseif ($verifikasi_pegawai->status == \App\Models\VerifikasiPegawai::STATUS_REJECTED)
+                      <a href="{{ route('admin.verifikasi-pegawai.reset', ['id' => $item->id]) }}" onclick="return confirm('Data ini akan dihapus?')" class="btn btn-danger btn-sm btn-block">
+                        <i class="fas fa-trash-alt mr-1"></i>
+                        {{ __('Reset Data') }}
+                      </a>
+                    @endif
+                  @endif
 
                   {{-- @if ($item->pegawai)
                   <a href="{{ route('admin.pegawai.tte', ['id' => $item->id]) }}" class="btn btn-primary btn-sm me-1">

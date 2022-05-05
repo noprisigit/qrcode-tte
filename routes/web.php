@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\BidangController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DinasController;
 use App\Http\Controllers\Admin\PegawaiController;
+use App\Http\Controllers\Admin\VerifikasiPegawaiController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\HelperController;
@@ -29,19 +30,23 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('/register', [RegisterController::class, 'register'])->name('register');
-Route::post('/register', [RegisterController::class, 'doRegister'])->name('register.doRegister');
-
-
-Route::group(['prefix' => 'auth', 'middleware' => 'guest'], function () {
-  Route::get('/login', [LoginController::class, 'index'])->name('auth.login');
-  Route::post('/login', [LoginController::class, 'authenticate'])->name('auth.login.process');
-  // Route::get('/register', [RegisterController::class, 'index'])->name('auth.register');
-  // Route::post('/register', [RegisterController::class, 'register'])->name('auth.register.process');
+Route::middleware('guest')->group(function () {
+  Route::get('/login', [LoginController::class, 'login'])->name('login');
+  Route::post('/login', [LoginController::class, 'doLogin'])->name('login.doLogin');
+  Route::get('/register', [RegisterController::class, 'register'])->name('register');
+  Route::post('/register', [RegisterController::class, 'doRegister'])->name('register.doRegister');
 });
 
+
+// Route::group(['prefix' => 'auth', 'middleware' => 'guest'], function () {
+//   Route::get('/login', [LoginController::class, 'index'])->name('auth.login');
+//   Route::post('/login', [LoginController::class, 'authenticate'])->name('auth.login.process');
+//   // Route::get('/register', [RegisterController::class, 'index'])->name('auth.register');
+//   // Route::post('/register', [RegisterController::class, 'register'])->name('auth.register.process');
+// });
+
 Route::middleware('auth')->group(function () {
-  Route::get('/logout', [LoginController::class, 'logout'])->name('auth.logout');
+  Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
   Route::get('/', function () {
     return view('main');
@@ -49,7 +54,17 @@ Route::middleware('auth')->group(function () {
   
   Route::group(['prefix' => 'administrator'], function () {
 
-    Route::get('/dahboard', [DashboardController::class, 'index'])->name('admin.dashboard.index');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard.index');
+
+
+    Route::group(['prefix' => 'pegawai/verification'], function() {
+      Route::get('/', [VerifikasiPegawaiController::class, 'index'])->name('admin.verifikasi-pegawai.index');
+      Route::get('/{id}/verify', [VerifikasiPegawaiController::class, 'verify'])->name('admin.verifikasi-pegawai.verify');
+      Route::get('/{id}/verify/accept', [VerifikasiPegawaiController::class, 'accept'])->name('admin.verifikasi-pegawai.accept');
+      Route::get('/{id}/verify/reject', [VerifikasiPegawaiController::class, 'reject'])->name('admin.verifikasi-pegawai.reject');
+      Route::get('/{id}/reset', [VerifikasiPegawaiController::class, 'reset'])->name('admin.verifikasi-pegawai.reset');
+      Route::get('/{id}/detail', [VerifikasiPegawaiController::class, 'detail'])->name('admin.verifikasi-pegawai.detail');
+    });
 
     Route::group(['prefix' => 'pegawai'], function() {
       Route::get('/', [PegawaiController::class, 'index'])->name('admin.pegawai.index');
