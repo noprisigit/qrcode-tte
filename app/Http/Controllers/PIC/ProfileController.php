@@ -7,6 +7,7 @@ use App\Http\Requests\UserChangePasswordRequest;
 use App\Http\Requests\UserUpdateProfileRequest;
 use App\Models\Bidang;
 use App\Models\Dinas;
+use App\Models\Pegawai;
 use App\Models\User;
 use App\Models\VerifikasiPegawai;
 use Illuminate\Http\Request;
@@ -35,29 +36,49 @@ class ProfileController extends Controller
   {
     $validated = $request->validated();
 
-    $isset_verifikasi = VerifikasiPegawai::where('user_id', auth()->user()->id)->exists();
-    if ($isset_verifikasi) {
-      Session::flash('error', 'Data anda belum diverifikasi, silahkan tunggu sampai verifikasi selesai');
-      return redirect()->route('pic.profile.index');
-    }
+    $user = User::findOrFail(auth()->user()->id);
+    $user->nama = $validated['name'];
+    $user->email = $validated['email'];
+    $user->no_telp = $validated['phone'];
+    $user->save();
 
-    VerifikasiPegawai::create(['user_id' => auth()->user()->id, 'type' => 'string', 'label' => 'NIK', 'name' => 'nik', 'value' => $validated['nik'], 'status' => 0]);
-    VerifikasiPegawai::create(['user_id' => auth()->user()->id, 'type' => 'string', 'label' => 'NIP', 'name' => 'nip', 'value' => $validated['nip'], 'status' => 0]);
-    VerifikasiPegawai::create(['user_id' => auth()->user()->id, 'type' => 'string', 'label' => 'Nama', 'name' => 'nama', 'value' => $validated['name'], 'status' => 0]);
-    VerifikasiPegawai::create(['user_id' => auth()->user()->id, 'type' => 'string', 'label' => 'Nomor Telepon', 'name' => 'no_telp', 'value' => $validated['phone'], 'status' => 0]);
-    VerifikasiPegawai::create(['user_id' => auth()->user()->id, 'type' => 'string', 'label' => 'Jenis Kelamin', 'name' => 'jenis_kelamin', 'value' => $validated['gender'], 'status' => 0]);
-    VerifikasiPegawai::create(['user_id' => auth()->user()->id, 'type' => 'integer', 'label' => 'Dinas', 'name' => 'dinas_id', 'value' => $validated['dinas_id'], 'status' => 0]);
-    VerifikasiPegawai::create(['user_id' => auth()->user()->id, 'type' => 'integer', 'label' => 'Bidang', 'name' => 'sub_bidang_id', 'value' => $validated['sub_bidang_id'], 'status' => 0]);
-    VerifikasiPegawai::create(['user_id' => auth()->user()->id, 'type' => 'string', 'label' => 'Tempat Lahir', 'name' => 'tempat_lahir', 'value' => $validated['pob'], 'status' => 0]);
-    VerifikasiPegawai::create(['user_id' => auth()->user()->id, 'type' => 'date', 'label' => 'Tanggal Lahir', 'name' => 'tanggal_lahir', 'value' => $validated['dob'], 'status' => 0]);
-    VerifikasiPegawai::create(['user_id' => auth()->user()->id, 'type' => 'string', 'label' => 'Pangkat', 'name' => 'pangkat', 'value' => $validated['pangkat'], 'status' => 0]);
-    VerifikasiPegawai::create(['user_id' => auth()->user()->id, 'type' => 'date', 'label' => 'TMT Pangkat', 'name' => 'tmt_pangkat', 'value' => $validated['tmt_pangkat'], 'status' => 0]);
-    VerifikasiPegawai::create(['user_id' => auth()->user()->id, 'type' => 'string', 'label' => 'Golongan', 'name' => 'golongan', 'value' => $validated['golongan'], 'status' => 0]);
-    VerifikasiPegawai::create(['user_id' => auth()->user()->id, 'type' => 'date', 'label' => 'TMT Golongan', 'name' => 'tmt_golongan', 'value' => $validated['tmt_golongan'], 'status' => 0]);
-    VerifikasiPegawai::create(['user_id' => auth()->user()->id, 'type' => 'date', 'label' => 'Tanggal Awal Pengangkatan', 'name' => 'tgl_awal_pengangkatan', 'value' => $validated['tgl_awal_pengangkatan'], 'status' => 0]);
-    VerifikasiPegawai::create(['user_id' => auth()->user()->id, 'type' => 'string', 'label' => 'Status Kepegawaian', 'name' => 'status_kepegawaian', 'value' => $validated['status_kepegawaian'], 'status' => 0]);
+    Pegawai::updateOrCreate(
+      ['user_id' => auth()->user()->id],
+      [
+        'user_id' => auth()->user()->id,
+        'nik' => $validated['nik'],
+        'nip' => $validated['nip'],
+        'jenis_kelamin' => $validated['gender'],
+        'tempat_lahir' => $validated['pob'],
+        'tanggal_lahir' => $validated['dob'],
+        'pangkat' => $validated['pangkat'],
+        'golongan' => $validated['golongan']
+      ]
+    );
 
-    Session::flash('success', 'Data diri berhasil diperbarui, dan akan diverifikasi oleh admin atau PIC anda.');
+    // $isset_verifikasi = VerifikasiPegawai::where('user_id', auth()->user()->id)->exists();
+    // if ($isset_verifikasi) {
+    //   Session::flash('error', 'Data anda belum diverifikasi, silahkan tunggu sampai verifikasi selesai');
+    //   return redirect()->route('pic.profile.index');
+    // }
+
+    // VerifikasiPegawai::create(['user_id' => auth()->user()->id, 'type' => 'string', 'label' => 'NIK', 'name' => 'nik', 'value' => $validated['nik'], 'status' => 0]);
+    // VerifikasiPegawai::create(['user_id' => auth()->user()->id, 'type' => 'string', 'label' => 'NIP', 'name' => 'nip', 'value' => $validated['nip'], 'status' => 0]);
+    // VerifikasiPegawai::create(['user_id' => auth()->user()->id, 'type' => 'string', 'label' => 'Nama', 'name' => 'nama', 'value' => $validated['name'], 'status' => 0]);
+    // VerifikasiPegawai::create(['user_id' => auth()->user()->id, 'type' => 'string', 'label' => 'Nomor Telepon', 'name' => 'no_telp', 'value' => $validated['phone'], 'status' => 0]);
+    // VerifikasiPegawai::create(['user_id' => auth()->user()->id, 'type' => 'string', 'label' => 'Jenis Kelamin', 'name' => 'jenis_kelamin', 'value' => $validated['gender'], 'status' => 0]);
+    // VerifikasiPegawai::create(['user_id' => auth()->user()->id, 'type' => 'integer', 'label' => 'Dinas', 'name' => 'dinas_id', 'value' => $validated['dinas_id'], 'status' => 0]);
+    // VerifikasiPegawai::create(['user_id' => auth()->user()->id, 'type' => 'integer', 'label' => 'Bidang', 'name' => 'sub_bidang_id', 'value' => $validated['sub_bidang_id'], 'status' => 0]);
+    // VerifikasiPegawai::create(['user_id' => auth()->user()->id, 'type' => 'string', 'label' => 'Tempat Lahir', 'name' => 'tempat_lahir', 'value' => $validated['pob'], 'status' => 0]);
+    // VerifikasiPegawai::create(['user_id' => auth()->user()->id, 'type' => 'date', 'label' => 'Tanggal Lahir', 'name' => 'tanggal_lahir', 'value' => $validated['dob'], 'status' => 0]);
+    // VerifikasiPegawai::create(['user_id' => auth()->user()->id, 'type' => 'string', 'label' => 'Pangkat', 'name' => 'pangkat', 'value' => $validated['pangkat'], 'status' => 0]);
+    // VerifikasiPegawai::create(['user_id' => auth()->user()->id, 'type' => 'date', 'label' => 'TMT Pangkat', 'name' => 'tmt_pangkat', 'value' => $validated['tmt_pangkat'], 'status' => 0]);
+    // VerifikasiPegawai::create(['user_id' => auth()->user()->id, 'type' => 'string', 'label' => 'Golongan', 'name' => 'golongan', 'value' => $validated['golongan'], 'status' => 0]);
+    // VerifikasiPegawai::create(['user_id' => auth()->user()->id, 'type' => 'date', 'label' => 'TMT Golongan', 'name' => 'tmt_golongan', 'value' => $validated['tmt_golongan'], 'status' => 0]);
+    // VerifikasiPegawai::create(['user_id' => auth()->user()->id, 'type' => 'date', 'label' => 'Tanggal Awal Pengangkatan', 'name' => 'tgl_awal_pengangkatan', 'value' => $validated['tgl_awal_pengangkatan'], 'status' => 0]);
+    // VerifikasiPegawai::create(['user_id' => auth()->user()->id, 'type' => 'string', 'label' => 'Status Kepegawaian', 'name' => 'status_kepegawaian', 'value' => $validated['status_kepegawaian'], 'status' => 0]);
+
+    Session::flash('success', 'Data diri berhasil diperbarui.');
     return redirect()->route('pic.profile.index');
   }
 

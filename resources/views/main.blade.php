@@ -13,6 +13,8 @@
     <link href="{{ asset('assets/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
     <!-- Custom styles for this template-->
     <link href="{{ asset('assets/css/sb-admin-2.min.css') }}" rel="stylesheet" />
 
@@ -29,40 +31,102 @@
           <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
           </div>
-          <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+          <div class="sidebar-brand-text mx-3">SITTE</div>
         </a>
 
         <!-- Divider -->
         <hr class="sidebar-divider my-0" />
 
         @if (auth()->user()->role_id == \App\Models\User::ROLE_ADMIN)
-        <li class="nav-item @if (Route::currentRouteName() == 'admin.dashboard.index') active @endif">
-          <a class="nav-link" href="{{ route('admin.dashboard.index') }}">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span>
-          </a>
-        </li>
+          <li class="nav-item @if (Route::currentRouteName() == 'admin.dashboard.index') active @endif">
+            <a class="nav-link" href="{{ route('admin.dashboard.index') }}">
+              <i class="fas fa-fw fa-tachometer-alt"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
 
-        <li class="nav-item @if(Route::currentRouteName() == 'admin.verifikasi-pegawai.index' || Route::currentRouteName() == 'admin.verifikasi-pegawai.verify' || Route::currentRouteName() == 'admin.verifikasi-pegawai.detail') active @endif">
-          <a class="nav-link" href="{{ route('admin.verifikasi-pegawai.index') }}">
-            <i class="fas fa-fw fa-user-check"></i>
-            <span>Verifikasi Pegawai</span>
-          </a>
-        </li>
+          <li class="nav-item @if(Route::currentRouteName() == 'admin.verifikasi-pegawai.index' || Route::currentRouteName() == 'admin.verifikasi-pegawai.verify' || Route::currentRouteName() == 'admin.verifikasi-pegawai.detail') active @endif">
+            <a class="nav-link" href="{{ route('admin.verifikasi-pegawai.index') }}">
+              <i class="fas fa-fw fa-user-check"></i>
+              <span>Verifikasi Pegawai</span>
+            </a>
+          </li>
 
-        <li class="nav-item @if(Route::currentRouteName() == 'admin.dinas.index' || Route::currentRouteName() == 'admin.bidang.index') active @endif">
-          <a class="nav-link @if(Route::currentRouteName() == 'admin.dinas.index' || Route::currentRouteName() == 'admin.bidang.index') collapsed @endif" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="@if(Route::currentRouteName() == 'admin.dinas.index' || Route::currentRouteName() == 'admin.bidang.index') true @else false @endif" aria-controls="collapsePages">
-            <i class="fas fa-fw fa-cogs"></i>
-            <span>Master Data</span>
-          </a>
-          <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-              <a class="collapse-item @if(Route::currentRouteName() == 'admin.dinas.index') active @endif" href="{{ route('admin.dinas.index') }}">{{ __('Dinas') }}</a>
-              <a class="collapse-item @if(Route::currentRouteName() == 'admin.bidang.index') active @endif" href="{{ route('admin.bidang.index') }}">{{ __('Sub Bidang') }}</a>
+          <li class="nav-item @if(Route::currentRouteName() == 'admin.dinas.index' || Route::currentRouteName() == 'admin.bidang.index' || Request::is('admin.user.index')) active @endif">
+            <a class="nav-link @if(Route::currentRouteName() <> 'admin.dinas.index' || Route::currentRouteName() <> 'admin.bidang.index' || Route::currentRouteName() <> 'admin.user.index') collapsed @endif" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="@if(Route::currentRouteName() == 'admin.dinas.index' || Route::currentRouteName() == 'admin.bidang.index') true @else false @endif" aria-controls="collapsePages">
+              <i class="fas fa-fw fa-cogs"></i>
+              <span>Master Data</span>
+            </a>
+            <div id="collapsePages" class="collapse @if(Route::currentRouteName() == 'admin.dinas.index' || Route::currentRouteName() == 'admin.bidang.index' || Request::is('administrator/users*')) show @endif" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+              <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item @if(Request::is('administrator/users*')) active @endif" href="{{ route('admin.user.index') }}">{{ __('Pengguna') }}</a>
+                <a class="collapse-item @if(Route::currentRouteName() == 'admin.dinas.index') active @endif" href="{{ route('admin.dinas.index') }}">{{ __('Dinas') }}</a>
+                <a class="collapse-item @if(Route::currentRouteName() == 'admin.bidang.index') active @endif" href="{{ route('admin.bidang.index') }}">{{ __('Sub Bidang') }}</a>
+              </div>
             </div>
-          </div>
-        </li>
-      @endif
+          </li>
+        @endif
+
+        @if (auth()->user()->role_id == \App\Models\User::ROLE_PIC)
+          <li class="nav-item @if (Route::currentRouteName() == 'pic.dashboard.index') active @endif">
+            <a class="nav-link" href="{{ route('pic.dashboard.index') }}">
+              <i class="fas fa-fw fa-tachometer-alt"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item @if(Request::is('pic/pegawai/verification*')) active @endif">
+            <a class="nav-link" href="{{ route('pic.verifikasi-pegawai.index') }}">
+              <i class="fas fa-fw fa-user-check"></i>
+              <span>Verifikasi Pegawai</span>
+            </a>
+          </li>
+
+          <li class="nav-item @if(Route::currentRouteName() == 'pic.profile.index' || Request::is('pic/profile*')) active @endif">
+            <a class="nav-link" href="{{ route('pic.profile.index') }}">
+              <i class="fas fa-fw fa-user"></i>
+              <span>Profil</span>
+            </a>
+          </li>
+
+          <li class="nav-item @if(Route::currentRouteName() == 'pic.documents.index') active @endif">
+            <a class="nav-link" href="{{ route('pic.documents.index') }}">
+              <i class="fas fa-fw fa-folder"></i>
+              <span>Berkas</span>
+            </a>
+          </li>
+
+          <li class="nav-item @if(Route::currentRouteName() == 'pic.generate-qrcode.index') active @endif">
+            <a class="nav-link" href="{{ route('pic.generate-qrcode.index') }}">
+              <i class="fas fa-fw fa-qrcode"></i>
+              <span>Cetak TTE</span>
+            </a>
+          </li>
+
+        @endif
+
+        @if (auth()->user()->role_id == \App\Models\User::ROLE_USER)
+          <li class="nav-item @if (Route::currentRouteName() == 'user.profile.index' || Route::currentRouteName() == 'user.profile.change-password' || Route::currentRouteName() == 'user.profile.edit') active @endif">
+            <a class="nav-link" href="{{ route('user.profile.index') }}">
+              <i class="fas fa-fw fa-user"></i>
+              <span>Profil</span>
+            </a>
+          </li>
+          
+          <li class="nav-item @if (Route::currentRouteName() == 'user.documents.index') active @endif">
+            <a class="nav-link" href="{{ route('user.documents.index') }}">
+              <i class="fas fa-fw fa-folder"></i>
+              <span>Berkas</span>
+            </a>
+          </li>
+
+          <li class="nav-item @if (Route::currentRouteName() == 'user.generate-qrcode.index') active @endif">
+            <a class="nav-link" href="{{ route('user.generate-qrcode.index') }}">
+              <i class="fas fa-fw fa-qrcode"></i>
+              <span>Cetak TTE</span>
+            </a>
+          </li>
+
+        @endif
 
         <!-- Nav Item - Dashboard -->
         
@@ -172,11 +236,15 @@
     <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
+    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script> --}}
+
     <!-- Core plugin JavaScript-->
     <script src="{{ asset('assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 
     <!-- Custom scripts for all pages-->
     <script src="{{ asset('assets/js/sb-admin-2.min.js') }}"></script>
+
+    <script src="{{ asset('assets/js/custom.js') }}"></script>
 
     @stack('js')
   </body>

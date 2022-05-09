@@ -94,10 +94,10 @@ class PegawaiController extends Controller
   {
     $size = 300;
 
-    $user = User::with('dinas', 'pegawai')->findOrFail($request->id);
+    $user = User::with('dinas', 'pegawai')->findOrFail($request->user_id);
 
     if ($request->with_logo) {
-      $qrcodeLogo = QrCodeLogo::where('user_id', $request->id)->first();
+      $qrcodeLogo = QrCodeLogo::where('user_id', $request->user_id)->first();
       if (!$qrcodeLogo) {
         $request->session()->flash('error', 'Logo tidak ditemukan. Silahkan upload logo terlebih dahulu.');
         return response()->json(['status' => false]);
@@ -115,7 +115,7 @@ class PegawaiController extends Controller
       $qrcode = QrCode::format('png')->size($size)->generate(route('link.detail.pegawai', ['unique_code' => $user->unique_code]));
     }
 
-    $tte = Tte::where('user_id', $request->id)->first();
+    $tte = Tte::where('user_id', $request->user_id)->first();
     if ($tte && $tte->qrcode) {
       Storage::delete($tte->qrcode);
     }
@@ -124,7 +124,7 @@ class PegawaiController extends Controller
     Storage::disk('public')->put($output_filename, $qrcode);
 
     Tte::updateOrCreate(
-      ['user_id' => $request->id],
+      ['user_id' => $request->user_id],
       ['qrcode' => $output_filename]
     );
 

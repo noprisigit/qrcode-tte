@@ -6,6 +6,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GenerateQrCodeRequest;
 use App\Http\Requests\UploadLogoQrCodeRequest;
+use App\Jobs\SendMailQrCodeJob;
 use App\Models\QrCodeLogo;
 use App\Models\Tte;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -60,6 +61,37 @@ class GenerateQrCodeController extends Controller
     // return response(base64_encode($qrcode))->header('Content-Type', 'image/png');
     return response()->json([
       'html' => view('user.generate-qrcode.generate-qrcode-result', compact('output_filename'))->render(),
+    ]);
+    // return redirect()->route('user.generate-qrcode.result', ['output_filename' => $output_filename]);
+  }
+
+  public function sendToMail(Request $request)
+  {
+    $image = $request->img;
+    $image = str_replace('data:image/png;base64,', '', $image);
+    $image = str_replace(' ', '+', $image);
+    $data = base64_decode($image);
+
+    $tte = Tte::with('user')->where('user_id', auth()->user()->id)->first();
+    if ($tte) {
+      Storage::delete($tte->tte);
+    }
+
+    $destinationPath = '/img/qr-code/tte-'.time().'.jpg';
+    Storage::disk('public')->put($destinationPath, $data);
+
+    Tte::updateOrCreate(
+      ['user_id' => auth()->user()->id],
+      [
+        'user_id' => auth()->user()->id,
+        'tte' => $destinationPath
+      ]
+    );    
+
+    dispatch(new SendMailQrCodeJob($tte));
+  
+    return response()->json([
+      'status' => true
     ]);
   }
 

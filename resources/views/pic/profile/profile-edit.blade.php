@@ -77,43 +77,12 @@
                     <option value="Laki-Laki" @if(Request::old('gender') == 'Laki-Laki' || ($user->pegawai && $user->pegawai->jenis_kelamin && $user->pegawai->jenis_kelamin == 'Laki-Laki')) selected @endif>{{ __('Laki-Laki') }}</option>
                     <option value="Perempuan" @if(Request::old('gender') == 'Perempuan' || ($user->pegawai && $user->pegawai->jenis_kelamin && $user->pegawai->jenis_kelamin == 'Perempuan')) selected @endif>{{ __('Perempuan') }}</option>
                   </select>
-                  @error('email')
+                  @error('jenis_kelamin')
                     <span class="invalid-feedback">{{ $message }}</span>
                   @enderror
                 </div>
               </div>
-              <div class="col-md-6 col-12">
-                <div class="form-group">
-                  <label for="dinas_id">{{ __('Dinas') }} <span class="text-danger">*</span></label>
-                  <select name="dinas_id" id="dinas_id" class="form-control @error('dinas_id') is-invalid @enderror">
-                    <option selected disabled>{{ __('Pilih dinas') }}</option>
-                    @foreach ($dinas as $item)
-                      <option value="{{ $item->id }}" @if(Request::old('dinas_id') == $item->id || (auth()->user()->dinas_id == $item->id)) selected @endif>{{ $item->nama }}</option>
-                    @endforeach
-                  </select>
-                  @error('dinas_id')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                  @enderror
-                </div>
-              </div>
-              <div class="col-md-6 col-12">
-                <div class="form-group">
-                  <label for="sub_bidang_id">{{ __('Bidang') }} <span class="text-danger">*</span></label>
-                  <select name="sub_bidang_id" id="sub_bidang_id" class="form-control @error('sub_bidang_id') is-invalid @enderror">
-                    <option selected disabled>{{ __('Pilih bidang') }}</option>
-                    <div id="sub-bidang-option">
-                      @if ($sub_bidang)
-                        @foreach ($sub_bidang as $item)
-                          <option value="{{ $item->id }}" @if($item->id == $user->sub_bidang_id) selected @endif>{{ $item->nama }}</option>
-                        @endforeach
-                      @endif
-                    </div>
-                  </select>
-                  @error('sub_bidang_id')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                  @enderror
-                </div>
-              </div>
+            
               <div class="col-md-6 col-12">
                 <div class="form-group">
                   <label for="pob">{{ __('Tempat Lahir') }} <span class="text-danger">*</span></label>
@@ -143,45 +112,9 @@
               </div>
               <div class="col-md-6 col-12">
                 <div class="form-group">
-                  <label for="tmt_pangkat">{{ __('TMT Pangkat') }} <span class="text-danger">*</span></label>
-                  <input type="date" name="tmt_pangkat" id="tmt_pangkat" class="form-control @error('tmt_pangkat') is-invalid @enderror" value="{{ old('tmt_pangkat', $user->pegawai && $user->pegawai->tmt_pangkat ? $user->pegawai->tmt_pangkat : '') }}" placeholder="TMT Pangkat">
-                  @error('tmt_pangkat')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                  @enderror
-                </div>
-              </div>
-              <div class="col-md-6 col-12">
-                <div class="form-group">
                   <label for="golongan">{{ __('Golongan') }} <span class="text-danger">*</span></label>
                   <input type="text" name="golongan" id="golongan" class="form-control @error('golongan') is-invalid @enderror" value="{{ old('golongan', $user->pegawai && $user->pegawai->golongan ? $user->pegawai->golongan : '') }}" placeholder="Golongan">
                   @error('golongan')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                  @enderror
-                </div>
-              </div>
-              <div class="col-md-6 col-12">
-                <div class="form-group">
-                  <label for="tmt_golongan">{{ __('TMT Golongan') }} <span class="text-danger">*</span></label>
-                  <input type="date" name="tmt_golongan" id="tmt_golongan" class="form-control @error('tmt_golongan') is-invalid @enderror" value="{{ old('tmt_golongan', $user->pegawai && $user->pegawai->tmt_golongan ? $user->pegawai->tmt_golongan : '') }}" placeholder="TMT Golongan">
-                  @error('tmt_golongan')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                  @enderror
-                </div>
-              </div>
-              <div class="col-md-6 col-12">
-                <div class="form-group">
-                  <label for="tgl_awal_pengangkatan">{{ __('Tanggal Awal Pengangkatan') }} <span class="text-danger">*</span></label>
-                  <input type="date" name="tgl_awal_pengangkatan" id="tgl_awal_pengangkatan" class="form-control @error('tgl_awal_pengangkatan') is-invalid @enderror" value="{{ old('tgl_awal_pengangkatan', $user->pegawai && $user->pegawai->tgl_awal_pengangkatan ? $user->pegawai->tgl_awal_pengangkatan : '') }}" placeholder="Tanggal Awal Pengangkatan">
-                  @error('tgl_awal_pengangkatan')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                  @enderror
-                </div>
-              </div>
-              <div class="col-md-6 col-12">
-                <div class="form-group">
-                  <label for="status_kepegawaian">{{ __('Status Kepegawaian') }} <span class="text-danger">*</span></label>
-                  <input type="text" name="status_kepegawaian" id="status_kepegawaian" class="form-control @error('status_kepegawaian') is-invalid @enderror" value="{{ old('status_kepegawaian', $user->pegawai && $user->pegawai->status_kepegawaian ? $user->pegawai->status_kepegawaian : '') }}" placeholder="Status Kepegawaian">
-                  @error('status_kepegawaian')
                     <span class="invalid-feedback">{{ $message }}</span>
                   @enderror
                 </div>

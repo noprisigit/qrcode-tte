@@ -11,4 +11,9 @@ class Tte extends Model
 
     protected $table = 'tte';
     protected $fillable = ['user_id', 'qrcode', 'tte'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 }

@@ -5,7 +5,7 @@
 @section('content')
 <section class="section">
   <div class="row">
-    <div class="col-12 col-md-6 col-lg-6">
+    <div class="col-12 col-md-8 col-lg-8">
 
       @if (Session::has('success'))
         <div class="alert alert-success notification">{{ Session::get('success') }}</div>
@@ -15,9 +15,9 @@
         <div class="alert alert-danger notification">{{ Session::get('error') }}</div>
       @endif
 
-      <div class="card">
-        <div class="card-header">
-          <h4 class="card-title">{{ __('Form Ubah Kata Sandi') }}</h4>
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Form Ubah Kata Sandi</h6>
         </div>
         <div class="card-body">
           <form action="{{ route('user.profile.change-password.process') }}" method="post">

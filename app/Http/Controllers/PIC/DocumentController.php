@@ -25,11 +25,17 @@ class DocumentController extends Controller
     $file = $request->file('file');
     $filename = $file->store('documents');
 
-    Document::updateOrCreate([
-      'user_id' => auth()->user()->id,
-      'jenis_dokumen' => $validated['file_type'],
-      'nama_file' => $filename
-    ]);
+    Document::updateOrCreate(
+      [
+        'user_id' => auth()->user()->id,
+        'jenis_dokumen' => $validated['file_type']
+      ],
+      [
+        'user_id' => auth()->user()->id,
+        'jenis_dokumen' => $validated['file_type'],
+        'nama_file' => $filename
+      ]
+    );
 
     $request->session()->flash('success', 'Dokumen berhasil ditambahkan!');
     return response()->json([

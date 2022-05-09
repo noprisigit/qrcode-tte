@@ -13,19 +13,16 @@
     <div class="alert alert-danger notification">{{ Session::get('error') }}</div>
   @endif
 
-  <div class="card">
-    <div class="card-header">
-      <div class="d-flex justify-content-between align-items-center">
-        <h4 class="card-title">{{ __('Data Diri') }}</h4>
-        <div>
-          <a href="{{ route('pic.profile.change-password') }}" class="btn btn-secondary"><i class="fas fa-key me-2"></i> {{ __('Ubah Kata Sandi') }}</a>
-          <a href="{{ route('pic.profile.edit') }}" class="btn btn-primary"><i class="fas fa-user me-2"></i> {{ __('Ubah Data Diri') }}</a>
-        </div>
+  <div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+      <h6 class="m-0 font-weight-bold text-primary">Data Diri</h6>
+      <div>
+        <a href="{{ route('pic.profile.change-password') }}" class="btn btn-secondary"><i class="fas fa-key me-2"></i> {{ __('Ubah Kata Sandi') }}</a>
+        <a href="{{ route('pic.profile.edit') }}" class="btn btn-primary"><i class="fas fa-user me-2"></i> {{ __('Ubah Data Diri') }}</a>
       </div>
-
     </div>
     <div class="card-body">
-      <table class="table text-dark">
+      <table class="text-dark">
         <tbody>
           <tr>
             <th class="border-bottom-0" width="19%">{{ __('Nama') }}</th>
@@ -45,7 +42,11 @@
           <tr>
             <th class="border-bottom-0" width="19%">{{ __('Jenis Kelamin') }}</th>
             <th class="border-bottom-0" width="1%">:</th>
-            <td class="border-bottom-0">{{ auth()->user()->jenis_kelamin }}</td>
+            <td class="border-bottom-0">
+              @if (auth()->user()->pegawai)
+                  {{ auth()->user()->pegawai->jenis_kelamin }}
+              @endif
+            </td>
           </tr>
           <tr>
             <th class="border-bottom-0" width="19%">{{ __('Dinas') }}</th>
@@ -73,29 +74,9 @@
             <td class="border-bottom-0">@if(auth()->user()->pegawai) {{ auth()->user()->pegawai->pangkat }} @endif</td>
           </tr>
           <tr>
-            <th class="border-bottom-0" width="19%">{{ __('TMT Pangkat') }}</th>
-            <th class="border-bottom-0" width="1%">:</th>
-            <td class="border-bottom-0">@if(auth()->user()->pegawai) {{ \App\Models\Pegawai::getTanggalIndonesia(auth()->user()->pegawai->tmt_pangkat, true) }} @endif</td>
-          </tr>
-          <tr>
             <th class="border-bottom-0" width="19%">{{ __('Golongan') }}</th>
             <th class="border-bottom-0" width="1%">:</th>
             <td class="border-bottom-0">@if(auth()->user()->pegawai) {{ auth()->user()->pegawai->golongan }} @endif</td>
-          </tr>
-          <tr>
-            <th class="border-bottom-0" width="19%">{{ __('TMT Golongan') }}</th>
-            <th class="border-bottom-0" width="1%">:</th>
-            <td class="border-bottom-0">@if(auth()->user()->pegawai) {{ \App\Models\Pegawai::getTanggalIndonesia(auth()->user()->pegawai->tmt_golongan, true) }} @endif</td>
-          </tr>
-          <tr>
-            <th class="border-bottom-0" width="19%">{{ __('Tanggal Awal Pengangkatan') }}</th>
-            <th class="border-bottom-0" width="1%">:</th>
-            <td class="border-bottom-0">@if(auth()->user()->pegawai) {{ \App\Models\Pegawai::getTanggalIndonesia(auth()->user()->pegawai->tgl_awal_pengangkatan, true) }} @endif</td>
-          </tr>
-          <tr>
-            <th class="border-bottom-0" width="19%">{{ __('Status Kepegawaian') }}</th>
-            <th class="border-bottom-0" width="1%">:</th>
-            <td class="border-bottom-0">@if(auth()->user()->pegawai) {{ auth()->user()->pegawai->status_kepegawaian }} @endif</td>
           </tr>
         </tbody>
       </table>

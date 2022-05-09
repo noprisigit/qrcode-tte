@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\BidangController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DinasController;
 use App\Http\Controllers\Admin\PegawaiController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VerifikasiPegawaiController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\PIC\DocumentController as AppDocumentController;
 use App\Http\Controllers\PIC\GenerateQrCodeController as AppGenerateQrCodeController;
 use App\Http\Controllers\PIC\ProfileController as AppProfileController;
 use App\Http\Controllers\PIC\VerificationController as AppVerificationController;
+use App\Http\Controllers\PIC\VerifikasiPegawaiController as AppVerifikasiPegawaiController;
 use App\Http\Controllers\User\DocumentController;
 use App\Http\Controllers\User\GenerateQrCodeController;
 use App\Http\Controllers\User\ProfileController;
@@ -64,6 +66,8 @@ Route::middleware('auth')->group(function () {
       Route::get('/{id}/verify/reject', [VerifikasiPegawaiController::class, 'reject'])->name('admin.verifikasi-pegawai.reject');
       Route::get('/{id}/reset', [VerifikasiPegawaiController::class, 'reset'])->name('admin.verifikasi-pegawai.reset');
       Route::get('/{id}/detail', [VerifikasiPegawaiController::class, 'detail'])->name('admin.verifikasi-pegawai.detail');
+      Route::get('/{id}/generate', [VerifikasiPegawaiController::class, 'generateTte'])->name('admin.verifikasi-pegawai.tte');
+      Route::post('/send/mail', [VerifikasiPegawaiController::class, 'sendToMail'])->name('admin.verifikasi-pegawai.sendToMail');
     });
 
     Route::group(['prefix' => 'pegawai'], function() {
@@ -76,6 +80,16 @@ Route::middleware('auth')->group(function () {
       Route::post('/{id}/upload/logo', [PegawaiController::class, 'uploadLogo'])->name('admin.pegawai.upload-logo');
       Route::post('/generate/qrcode', [PegawaiController::class, 'generateQrCode'])->name('admin.pegawai.generate-qrcode');
     });
+
+    Route::group(['prefix' => 'users'], function() {
+      Route::get('/', [UserController::class, 'index'])->name('admin.user.index');
+      Route::get('/create', [UserController::class, 'create'])->name('admin.user.create');
+      Route::post('/store', [UserController::class, 'store'])->name('admin.user.store');
+      Route::get('/{id}/show', [UserController::class, 'show'])->name('admin.user.show');
+      Route::get('/{id}/edit', [UserController::class, 'edit'])->name('admin.user.edit');
+      Route::post('/{id}/update', [UserController::class, 'update'])->name('admin.user.update');
+      Route::get('/{id}/destroy', [UserController::class, 'destroy'])->name('admin.user.destroy');
+    });
   
     Route::resource('dinas', DinasController::class, ['as' => 'admin', 'parameters' => ['dinas' => 'id']]);
   
@@ -86,6 +100,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/', function() {
       return view('pic.dashboard.dashboard-index');
     })->name('pic.dashboard.index');
+
+    Route::group(['prefix' => 'pegawai/verification'], function() {
+      Route::get('/', [AppVerifikasiPegawaiController::class, 'index'])->name('pic.verifikasi-pegawai.index');
+      Route::get('/{id}/verify', [AppVerifikasiPegawaiController::class, 'verify'])->name('pic.verifikasi-pegawai.verify');
+      Route::get('/{id}/verify/accept', [AppVerifikasiPegawaiController::class, 'accept'])->name('pic.verifikasi-pegawai.accept');
+      Route::get('/{id}/verify/reject', [AppVerifikasiPegawaiController::class, 'reject'])->name('pic.verifikasi-pegawai.reject');
+      Route::get('/{id}/reset', [AppVerifikasiPegawaiController::class, 'reset'])->name('pic.verifikasi-pegawai.reset');
+      Route::get('/{id}/detail', [AppVerifikasiPegawaiController::class, 'detail'])->name('pic.verifikasi-pegawai.detail');
+      Route::get('/{id}/generate', [AppVerifikasiPegawaiController::class, 'generateTte'])->name('pic.verifikasi-pegawai.tte');
+    });
 
     Route::group(['prefix' => 'verification'], function() {
       Route::get('/', [AppVerificationController::class, 'index'])->name('pic.verification.index');
@@ -115,6 +139,7 @@ Route::middleware('auth')->group(function () {
       Route::get('/', [AppGenerateQrCodeController::class, 'index'])->name('pic.generate-qrcode.index');
       Route::post('/generate', [AppGenerateQrCodeController::class, 'generate'])->name('pic.generate-qrcode.generate');
       Route::post('/upload/logo', [AppGenerateQrCodeController::class, 'uploadLogo'])->name('pic.generate-qrcode.upload-logo');
+      Route::post('/send/mail', [AppGenerateQrCodeController::class, 'sendToMail'])->name('pic.generate-qrcode.sendToMail');
     });
   });
   
@@ -146,6 +171,8 @@ Route::middleware('auth')->group(function () {
       Route::get('/', [GenerateQrCodeController::class, 'index'])->name('user.generate-qrcode.index');
       Route::post('/generate', [GenerateQrCodeController::class, 'generate'])->name('user.generate-qrcode.generate');
       Route::post('/upload/logo', [GenerateQrCodeController::class, 'uploadLogo'])->name('user.generate-qrcode.upload-logo');
+      Route::get('/result', [GenerateQrCodeController::class, 'result'])->name('user.generate-qrcode.result');
+      Route::post('/send/mail', [GenerateQrCodeController::class, 'sendToMail'])->name('user.generate-qrcode.sendToMail');
     });
   });
 });

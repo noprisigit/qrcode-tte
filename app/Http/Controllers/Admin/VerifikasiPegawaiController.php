@@ -5,13 +5,18 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendEmailVerificationAcceptJob;
 use App\Jobs\SendEmailVerificationRejectJob;
+use App\Jobs\SendMailQrCodeJob;
+use App\Models\Document;
 use App\Models\Pegawai;
+use App\Models\QrCodeLogo;
 use App\Models\TempUser;
+use App\Models\Tte;
 use App\Models\User;
 use App\Models\VerifikasiPegawai;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 
 class VerifikasiPegawaiController extends Controller
 {
@@ -71,6 +76,24 @@ class VerifikasiPegawaiController extends Controller
       'created_at' => now(),
       'updated_at' => now(),
     ]);
+
+    $documents = [
+      [
+        'user_id' => $user,
+        'jenis_dokumen' => 'KTP',
+        'nama_file' => $temp_user->file_ktp,
+        'created_at' => now(),
+        'updated_at' => now(),
+      ],
+      [
+        'user_id' => $user,
+        'jenis_dokumen' => 'SK Terakhir',
+        'nama_file' => $temp_user->file_sk_terakhir,
+        'created_at' => now(),
+        'updated_at' => now(),
+      ]
+    ];
+    Document::insert($documents);
 
     dispatch(new SendEmailVerificationAcceptJob($email));
 
@@ -143,5 +166,55 @@ class VerifikasiPegawaiController extends Controller
     $verify = VerifikasiPegawai::where('identity_number', $identity_number)->get();
 
     return view('admin.verifikasi-pegawai.verifikasi-pegawai-detail', compact('user', 'verify'));
+  }
+
+  public function generateTte($id)
+  {
+    $temp_user = TempUser::with('bidang', 'dinas')
+      ->where('dinas_id', auth()->user()->dinas_id)
+      ->findOrFail($id);
+
+    $email = $temp_user->email;
+    $user = User::with('bidang', 'dinas')
+      ->where('email', $email)
+      ->where('dinas_id', auth()->user()->dinas_id)
+      ->firstOrFail();
+    $user_id = $user->id;
+
+    $qrcodeLogo = QrCodeLogo::where('user_id', $user_id)->first();
+
+    return view('admin.verifikasi-pegawai.verifikasi-pegawai-qrcode', compact('user', 'qrcodeLogo', 'user_id'));
+  }
+
+  public function sendToMail(Request $request)
+  {
+    $image = $request->img;
+    $image = str_replace('data:image/png;base64,', '', $image);
+    $image = str_replace(' ', '+', $image);
+    $data = base64_decode($image);
+
+    $user_id = $request->user_id ?? auth()->user()->id;
+
+    $tte = Tte::with('user')->where('user_id', $user_id)->first();
+    if ($tte) {
+      Storage::delete($tte->tte);
+    }
+
+    $destinationPath = '/img/qr-code/tte-'.time().'.jpg';
+    Storage::disk('public')->put($destinationPath, $data);
+
+    Tte::updateOrCreate(
+      ['user_id' => $user_id],
+      [
+        'user_id' => $user_id,
+        'tte' => $destinationPath
+      ]
+    );
+
+    dispatch(new SendMailQrCodeJob($tte));
+
+    return response()->json([
+      'status' => true
+    ]);
   }
 }

@@ -20,43 +20,47 @@ class LoginController extends Controller
   {
     $validated = $request->validated();
 
-    $email = $validated['email'];
-    $verifikasi_pegawai = VerifikasiPegawai::where('value', $email)->first();
-    if (!$verifikasi_pegawai) {
-      $request->session()->flash('error', 'Email anda tidak terdaftar!');
+    $user = User::where('email', $validated['email'])->first();
+    if ($user) {
+      $credentials = [
+        'email' => $validated['email'],
+        'password' => $validated['password'],
+        'status' => User::STATUS_ACTIVE
+      ];
+  
+      if (auth()->attempt($credentials)) {
+  
+        $request->session()->regenerate();
+  
+        if (auth()->user()->role_id == User::ROLE_ADMIN)
+          return redirect()->route('admin.dashboard.index');
+  
+        if (auth()->user()->role_id == User::ROLE_PIC)
+          return redirect()->route('pic.dashboard.index');
+          
+        if (auth()->user()->role_id == User::ROLE_USER)
+          return redirect()->route('user.profile.index');
+      }
+  
+      Session::flash('error', 'Email atau kata sandi salah!');
       return redirect()->route('login');
     } else {
-      if ($verifikasi_pegawai->status == VerifikasiPegawai::STATUS_WAITING) {
-        $request->session()->flash('error', 'Data anda masih dalam tahap verifikasi!');
+      $email = $validated['email'];
+      $verifikasi_pegawai = VerifikasiPegawai::where('value', $email)->first();
+      if (!$verifikasi_pegawai) {
+        $request->session()->flash('error', 'Email anda tidak terdaftar!');
         return redirect()->route('login');
-      } elseif ($verifikasi_pegawai->status == VerifikasiPegawai::STATUS_REJECTED) {
-        $request->session()->flash('error', 'Data anda telah ditolak!. <br> Silahkan hubungi administrator untuk melakukan reset data anda!');
-        return redirect()->route('login');
+      } else {
+        if ($verifikasi_pegawai->status == VerifikasiPegawai::STATUS_WAITING) {
+          $request->session()->flash('error', 'Data anda masih dalam tahap verifikasi!');
+          return redirect()->route('login');
+        } elseif ($verifikasi_pegawai->status == VerifikasiPegawai::STATUS_REJECTED) {
+          $request->session()->flash('error', 'Data anda telah ditolak!. <br> Silahkan hubungi administrator untuk melakukan reset data anda!');
+          return redirect()->route('login');
+        }
       }
     }
 
-    $credentials = [
-      'email' => $validated['email'],
-      'password' => $validated['password'],
-      'status' => User::STATUS_ACTIVE
-    ];
-
-    if (auth()->attempt($credentials)) {
-
-      $request->session()->regenerate();
-
-      if (auth()->user()->role_id == User::ROLE_ADMIN)
-        return redirect()->route('admin.dashboard.index');
-
-      if (auth()->user()->role_id == User::ROLE_PIC)
-        return redirect()->route('pic.verification.index');
-        
-      if (auth()->user()->role_id == User::ROLE_USER)
-        return redirect()->route('user.profile.index');
-    }
-
-    Session::flash('error', 'Email atau kata sandi salah!');
-    return redirect()->route('login');
   }
 
   public function logout(Request $request)

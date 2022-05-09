@@ -15,9 +15,9 @@
         <div class="alert alert-danger notification">{{ Session::get('error') }}</div>
       @endif
 
-      <div class="card">
-        <div class="card-header">
-          <h4 class="card-title">{{ __('Form Ubah Data Diri') }}</h4>
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Form Ubah Data Diri</h6>
         </div>
         <div class="card-body">
           <form action="{{ route('user.profile.update') }}" method="post">
@@ -82,7 +82,7 @@
                   @enderror
                 </div>
               </div>
-              <div class="col-md-6 col-12">
+              {{-- <div class="col-md-6 col-12">
                 <div class="form-group">
                   <label for="dinas_id">{{ __('Dinas') }} <span class="text-danger">*</span></label>
                   <select name="dinas_id" id="dinas_id" class="form-control @error('dinas_id') is-invalid @enderror">
@@ -113,7 +113,7 @@
                     <span class="invalid-feedback">{{ $message }}</span>
                   @enderror
                 </div>
-              </div>
+              </div> --}}
               <div class="col-md-6 col-12">
                 <div class="form-group">
                   <label for="pob">{{ __('Tempat Lahir') }} <span class="text-danger">*</span></label>
@@ -141,7 +141,7 @@
                   @enderror
                 </div>
               </div>
-              <div class="col-md-6 col-12">
+              {{-- <div class="col-md-6 col-12">
                 <div class="form-group">
                   <label for="tmt_pangkat">{{ __('TMT Pangkat') }} <span class="text-danger">*</span></label>
                   <input type="date" name="tmt_pangkat" id="tmt_pangkat" class="form-control @error('tmt_pangkat') is-invalid @enderror" value="{{ old('tmt_pangkat', $user->pegawai && $user->pegawai->tmt_pangkat ? $user->pegawai->tmt_pangkat : '') }}" placeholder="TMT Pangkat">
@@ -149,7 +149,7 @@
                     <span class="invalid-feedback">{{ $message }}</span>
                   @enderror
                 </div>
-              </div>
+              </div> --}}
               <div class="col-md-6 col-12">
                 <div class="form-group">
                   <label for="golongan">{{ __('Golongan') }} <span class="text-danger">*</span></label>
@@ -159,7 +159,7 @@
                   @enderror
                 </div>
               </div>
-              <div class="col-md-6 col-12">
+              {{-- <div class="col-md-6 col-12">
                 <div class="form-group">
                   <label for="tmt_golongan">{{ __('TMT Golongan') }} <span class="text-danger">*</span></label>
                   <input type="date" name="tmt_golongan" id="tmt_golongan" class="form-control @error('tmt_golongan') is-invalid @enderror" value="{{ old('tmt_golongan', $user->pegawai && $user->pegawai->tmt_golongan ? $user->pegawai->tmt_golongan : '') }}" placeholder="TMT Golongan">
@@ -167,8 +167,8 @@
                     <span class="invalid-feedback">{{ $message }}</span>
                   @enderror
                 </div>
-              </div>
-              <div class="col-md-6 col-12">
+              </div> --}}
+              {{-- <div class="col-md-6 col-12">
                 <div class="form-group">
                   <label for="tgl_awal_pengangkatan">{{ __('Tanggal Awal Pengangkatan') }} <span class="text-danger">*</span></label>
                   <input type="date" name="tgl_awal_pengangkatan" id="tgl_awal_pengangkatan" class="form-control @error('tgl_awal_pengangkatan') is-invalid @enderror" value="{{ old('tgl_awal_pengangkatan', $user->pegawai && $user->pegawai->tgl_awal_pengangkatan ? $user->pegawai->tgl_awal_pengangkatan : '') }}" placeholder="Tanggal Awal Pengangkatan">
@@ -176,8 +176,8 @@
                     <span class="invalid-feedback">{{ $message }}</span>
                   @enderror
                 </div>
-              </div>
-              <div class="col-md-6 col-12">
+              </div> --}}
+              {{-- <div class="col-md-6 col-12">
                 <div class="form-group">
                   <label for="status_kepegawaian">{{ __('Status Kepegawaian') }} <span class="text-danger">*</span></label>
                   <input type="text" name="status_kepegawaian" id="status_kepegawaian" class="form-control @error('status_kepegawaian') is-invalid @enderror" value="{{ old('status_kepegawaian', $user->pegawai && $user->pegawai->status_kepegawaian ? $user->pegawai->status_kepegawaian : '') }}" placeholder="Status Kepegawaian">
@@ -185,7 +185,7 @@
                     <span class="invalid-feedback">{{ $message }}</span>
                   @enderror
                 </div>
-              </div>
+              </div> --}}
               
               <div class="col-12 d-flex justify-content-end">
                 <a href="{{ route('user.profile.index') }}" class="btn btn-light-secondary me-1 mb-1">{{ __('Batal') }}</a>

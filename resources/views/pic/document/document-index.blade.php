@@ -13,15 +13,22 @@
   <div class="alert alert-danger notification">{{ Session::get('error') }}</div>
   @endif
 
-  <div class="card">
+  {{-- <div class="card">
     <div class="card-header">
       <div class="d-flex justify-content-between align-items-center">
         <h4 class="card-title">{{ __('Berkas Pribadi') }}</h4>
         <div>
-          <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#uploadDocumentModal"><i class="fas fa-key me-2"></i> {{ __('Unggah Berkas') }}</a>
+          <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#uploadDocumentModal"><i class="fas fa-key me-2"></i> {{ __('Unggah Berkas') }}</a>
         </div>
       </div>
 
+    </div> --}}
+  <div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+      <h6 class="m-0 font-weight-bold text-primary">Berkas Pribadi</h6>
+      <div>
+        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#uploadDocumentModal"><i class="fas fa-key me-2"></i> {{ __('Unggah Berkas') }}</a>
+      </div>
     </div>
     <div class="card-body">
       @if (count($documents) < 1)
@@ -57,11 +64,11 @@
 
 <div class="modal fade text-left modal-borderless" id="uploadDocumentModal" tabindex="-1" role="dialog"
   aria-labelledby="myModalLabel1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable" role="document">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Unggah Berkas</h5>
-        <button type="button" class="close rounded-pill" data-bs-dismiss="modal" aria-label="Close">
+        <button type="button" class="close rounded-pill" data-dismiss="modal" aria-label="Close">
           <i data-feather="x"></i>
         </button>
       </div>
@@ -70,7 +77,11 @@
         <div class="modal-body">
           <div class="form-group">
             <label for="file_type">{{ __('Jenis File') }}</label>
-            <input type="text" name="file_type" id="file_type" class="form-control" placeholder="Jenis File ex. KTP, SK Terakhir">
+            <select name="file_type" id="file_type" class="form-control">
+              <option selected disabled>Pilih Jenis File</option>
+              <option value="KTP">KTP</option>
+              <option value="SK Terakhir">SK Terakhir</option>
+            </select>
             <span class="invalid-feedback" id="file_type"></span>
           </div>
           <div class="form-group">
@@ -80,7 +91,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal">
+          <button type="button" class="btn btn-light-primary" data-dismiss="modal">
             <i class="bx bx-x d-block d-sm-none"></i>
             <span class="d-none d-sm-block">Batal</span>
           </button>

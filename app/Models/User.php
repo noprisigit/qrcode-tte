@@ -61,6 +61,46 @@ class User extends Authenticatable
   //   return $this->belongsTo(Role::class);
   // }
 
+  public static function getRoleName($index = null, $html = false)
+  {
+    $array = [
+      self::ROLE_ADMIN => 'Administrator',
+      self::ROLE_PIC => 'PIC',
+      self::ROLE_USER => 'User',
+    ];
+
+    if ($html) {
+      $array = [
+        self::ROLE_ADMIN => '<span class="badge badge-primary">Administrator</span>',
+        self::ROLE_PIC => '<span class="badge badge-info">PIC</span>',
+        self::ROLE_USER => '<span class="badge badge-secondary">User</span>',
+      ];
+    }
+
+    if ($index == null) return $array;
+    if (isset($array[$index])) return $array[$index];
+    return null;
+  }
+
+  public static function getStatus($index = null, $html = false)
+  {
+    $array = [
+      self::STATUS_ACTIVE => 'Aktif',
+      self::STATUS_INACTIVE => 'Tidak Aktif'
+    ];
+
+    if ($html) {
+      $array = [
+        self::STATUS_ACTIVE => '<span class="badge badge-success">Aktif</span>',
+        self::STATUS_INACTIVE => '<span class="badge badge-danger">Tidak Aktif</span>'
+      ];
+    }
+
+    if ($index == null) return $array;
+    if (isset($array[$index])) return $array[$index];
+    return null;
+  }
+
   public function dinas()
   {
     return $this->belongsTo(Dinas::class);

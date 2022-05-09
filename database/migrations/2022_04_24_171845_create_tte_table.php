@@ -17,7 +17,7 @@ class CreateTteTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->string('qrcode')->nullable();
-            $table->string('tte')->nullable();
+            $table->text('tte')->nullable();
             $table->timestamps();
         });
     }

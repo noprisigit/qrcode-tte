@@ -7,7 +7,7 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
 
-    <title>SB Admin 2 - Login</title>
+    <title>SITTE - Login</title>
 
     <!-- Custom fonts for this template-->
     <link href="{{ asset('assets/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css" />
@@ -35,11 +35,11 @@
                       <h1 class="h4 text-gray-900 mb-4">Masuk</h1>
                     </div>
                     @if (Session::has('success'))
-                      <div class="alert alert-primary text-center"><i class="bi bi-check-circle me-2"></i> {{ Session::get('success') }}</div>
+                      <div class="alert alert-success text-center">{{ Session::get('success') }}</div>
                     @endif
 
                     @if (Session::has('error'))
-                      <div class="alert alert-danger text-center"><i class="bi bi-exclamation-circle"></i> {{ Session::get('error') }}</div>
+                      <div class="alert alert-danger text-center"> {{ Session::get('error') }}</div>
                     @endif
                     <form action="{{ route('login.doLogin') }}" method="POST" class="user">
                       @csrf

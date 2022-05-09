@@ -3,6 +3,15 @@
 @section('title', 'Dashboard')
 
 @section('content')
+<div class="card shadow mb-4">
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary">Selamat Datang</h6>
+  </div>
+  <div class="card-body">
+    <p>Selamat datang pada sistem informasi pencetakan tanda tangan elektronik Provinsi Kepulauan Bangka Belitung.</p>
+  </div>
+</div>
+{{--
 <!-- Content Row -->
 <div class="row">
 
@@ -60,5 +69,5 @@
       </div>
     </div>
   </div>
-</div>
+</div> --}}
 @endsection

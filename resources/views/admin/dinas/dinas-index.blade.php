@@ -1,12 +1,12 @@
 @extends('main')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('assets/vendors/jquery-datatables/jquery.dataTables.bootstrap5.min.css') }}">
+<link href="{{ asset('assets/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
 <section class="section">
-  <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#modalAdd">
+  <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#modalAdd">
     <i class="fas fa-plus me-2"></i>
     {{ __('Tambah') }}
   </button>
@@ -19,7 +19,7 @@
           @csrf
           <div class="modal-header">
             <h5 class="modal-title" id="myModalLabel1">{{ __('Form Tambah Dinas') }}</h5>
-            <button type="button" class="close rounded-pill" data-bs-dismiss="modal" aria-label="Close">
+            <button type="button" class="close rounded-pill" data-dismiss="modal" aria-label="Close">
               <i data-feather="x"></i>
             </button>
           </div>
@@ -35,7 +35,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal">
+            <button type="button" class="btn btn-light-primary" data-dismiss="modal">
               <i class="bx bx-x d-block d-sm-none"></i>
               <span class="d-none d-sm-block">{{ __('Tutup') }}</span>
             </button>
@@ -57,9 +57,9 @@
     <div class="alert alert-danger notification">{{ Session::get('error') }}</div>
   @endif
 
-  <div class="card">
-    <div class="card-header">
-      <h4 class="card-title">{{ __('Data Dinas') }}</h4>
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">Daftar Dinas</h6>
     </div>
     <div class="card-body">
       <table class="table" id="data-table">
@@ -78,11 +78,11 @@
               <td>{{ $item->nama }}</td>
               <td>{{ \Carbon\Carbon::create($item->created_at)->diffForHumans() }}</td>
               <td>
-                <button type="button" class="btn btn-warning btn-sm btn-edit me-1" data-bs-toggle="modal" data-action="{{ route('admin.dinas.update', $item->id) }}" data-nama="{{ $item->nama }}" data-bs-target="#modalEdit">
+                <button type="button" class="btn btn-warning btn-sm btn-edit me-1" data-toggle="modal" data-action="{{ route('admin.dinas.update', $item->id) }}" data-nama="{{ $item->nama }}" data-target="#modalEdit">
                   <i class="fas fa-pencil-alt me-2"></i>
                   {{ __('Edit') }}
                 </a>
-                <button type="button" class="btn btn-danger btn-sm btn-delete" data-action="{{ route('admin.dinas.destroy', $item->id) }}" data-bs-toggle="modal" data-bs-target="#modalDelete">
+                <button type="button" class="btn btn-danger btn-sm btn-delete" data-action="{{ route('admin.dinas.destroy', $item->id) }}" data-toggle="modal" data-target="#modalDelete">
                   <i class="fas fa-trash-alt me-2"></i>
                   {{ __('Hapus') }}
                 </a>
@@ -93,6 +93,7 @@
       </table>
     </div>
   </div>
+
 </section>
 
 <div class="modal modal-borderless fade text-left" id="modalEdit" tabindex="-1" role="dialog"
@@ -104,7 +105,7 @@
         @method('PUT')
         <div class="modal-header">
           <h5 class="modal-title" id="myModalLabel1">{{ __('Form Edit Dinas') }}</h5>
-          <button type="button" class="close rounded-pill" data-bs-dismiss="modal" aria-label="Close">
+          <button type="button" class="close rounded-pill" data-dismiss="modal" aria-label="Close">
             <i data-feather="x"></i>
           </button>
         </div>
@@ -120,7 +121,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal">
+          <button type="button" class="btn btn-light-primary" data-dismiss="modal">
             <i class="bx bx-x d-block d-sm-none"></i>
             <span class="d-none d-sm-block">{{ __('Tutup') }}</span>
           </button>
@@ -143,7 +144,7 @@
         @method('PUT')
         <div class="modal-header">
           <h5 class="modal-title" id="myModalLabel1">{{ __('Form Edit Dinas') }}</h5>
-          <button type="button" class="close rounded-pill" data-bs-dismiss="modal" aria-label="Close">
+          <button type="button" class="close rounded-pill" data-dismiss="modal" aria-label="Close">
             <i data-feather="x"></i>
           </button>
         </div>
@@ -159,7 +160,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal">
+          <button type="button" class="btn btn-light-primary" data-dismiss="modal">
             <i class="bx bx-x d-block d-sm-none"></i>
             <span class="d-none d-sm-block">{{ __('Tutup') }}</span>
           </button>
@@ -182,7 +183,7 @@
         @method('DELETE')
         <div class="modal-header">
           <h5 class="modal-title" id="myModalLabel1">{{ __('Apakah kamu yakin?') }}</h5>
-          <button type="button" class="close rounded-pill" data-bs-dismiss="modal" aria-label="Close">
+          <button type="button" class="close rounded-pill" data-dismiss="modal" aria-label="Close">
             <i data-feather="x"></i>
           </button>
         </div>
@@ -196,7 +197,7 @@
           </p>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-light-danger" data-bs-dismiss="modal">
+          <button type="button" class="btn btn-light-danger" data-dismiss="modal">
             <i class="bx bx-x d-block d-sm-none"></i>
             <span class="d-none d-sm-block">{{ __('Batal') }}</span>
           </button>
@@ -212,9 +213,8 @@
 @endsection
 
 @push('js')
-<script src="{{ asset('assets/vendors/jquery/jquery.min.js') }}"></script>
-<script src="{{ asset('assets/vendors/jquery-datatables/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('assets/vendors/jquery-datatables/custom.jquery.dataTables.bootstrap5.min.js') }}"></script>
+<script src="{{ asset('assets/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('assets/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
 <script type="text/javascript">
   $(document).ready(function() {
     $('#data-table').DataTable();

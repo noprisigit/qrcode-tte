@@ -1,4 +1,4 @@
-<table class="">
+<table class="" width="100%">
   <tr>
     <td rowspan="4" class="ps-3 pt-4 pb-4 pe-2" style="border-left: 4px solid black; border-top: 4px solid black; border-bottom: 4px solid black;">
       <img src="{{ asset('storage/' . $output_filename) }}" alt="">

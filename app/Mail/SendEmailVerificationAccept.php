@@ -36,6 +36,6 @@ class SendEmailVerificationAccept extends Mailable
     $data = VerifikasiPegawai::where('identity_number', $verifikasi_pegawai->identity_number)
       ->where('name', 'nama')
       ->first();
-    return $this->view('email.email-verification-accept', compact('data'));
+    return $this->subject('Pendaftaran Diterima')->view('email.email-verification-accept', compact('data'));
   }
 }
