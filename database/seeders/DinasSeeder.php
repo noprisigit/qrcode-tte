@@ -16,12 +16,15 @@ class DinasSeeder extends Seeder
     {
       $values = [
         [
+          'id' => 1,
           'nama' => 'Dinas Kesehatan',
         ],
         [
+          'id' => 2,
           'nama' => 'Dinas Pendidikan',
         ],
         [
+          'id' => 3,
           'nama' => 'Dinas Komunikasi dan Informatika',
         ]
       ];

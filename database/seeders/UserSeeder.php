@@ -10,46 +10,49 @@ use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
-      $values = [
-        [
-          'nama' => 'Admin',
-          'email' => 'admin@gmail.com',
-          'unique_code' => HelperController::generateUniqueCode(),
-          'password' => Hash::make('admin'),
-          'dinas_id' => 1,
-          'sub_bidang_id' => 2,
-          'role_id' => User::ROLE_ADMIN,
-          'status' => User::STATUS_ACTIVE
-        ],
-        [
-          'nama' => 'PIC',
-          'email' => 'pic@gmail.com',
-          'unique_code' => HelperController::generateUniqueCode(),
-          'password' => Hash::make('pic'),
-          'dinas_id' => 1,
-          'sub_bidang_id' => 2,
-          'role_id' => User::ROLE_PIC,
-          'status' => User::STATUS_ACTIVE
-        ],
-        [
-          'nama' => 'User',
-          'email' => 'user@gmail.com',
-          'unique_code' => HelperController::generateUniqueCode(),
-          'password' => Hash::make('user'),
-          'dinas_id' => 1,
-          'sub_bidang_id' => 2,
-          'role_id' => User::ROLE_USER,
-          'status' => User::STATUS_ACTIVE
-        ],
-      ];
+  /**
+   * Run the database seeds.
+   *
+   * @return void
+   */
+  public function run()
+  {
+    $values = [
+      [
+        'id' => 1,
+        'nama' => 'Admin',
+        'email' => 'admin@gmail.com',
+        'unique_code' => HelperController::generateUniqueCode(),
+        'password' => Hash::make('admin'),
+        'dinas_id' => 1,
+        'sub_bidang_id' => 2,
+        'role_id' => User::ROLE_ADMIN,
+        'status' => User::STATUS_ACTIVE
+      ],
+      [
+        'id' => 2,
+        'nama' => 'PIC',
+        'email' => 'pic@gmail.com',
+        'unique_code' => HelperController::generateUniqueCode(),
+        'password' => Hash::make('pic'),
+        'dinas_id' => 1,
+        'sub_bidang_id' => 2,
+        'role_id' => User::ROLE_PIC,
+        'status' => User::STATUS_ACTIVE
+      ],
+      [
+        'id' => 3,
+        'nama' => 'User',
+        'email' => 'user@gmail.com',
+        'unique_code' => HelperController::generateUniqueCode(),
+        'password' => Hash::make('user'),
+        'dinas_id' => 1,
+        'sub_bidang_id' => 2,
+        'role_id' => User::ROLE_USER,
+        'status' => User::STATUS_ACTIVE
+      ],
+    ];
 
-      DB::table('users')->insert($values);
-    }
+    DB::table('users')->insert($values);
+  }
 }
